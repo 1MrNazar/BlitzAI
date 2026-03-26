@@ -1,724 +1,1465 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BlitzAI – KI-Automatisierung für Ihr Unternehmen</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BlitzAI — Instagram DMs, die Termine buchen.</title>
+  <meta name="description" content="BlitzAI beantwortet Instagram-DMs in Sekunden, prüft Verfügbarkeit und bucht Termine automatisch — 24/7, im Stil deines Unternehmens." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@500;600;700&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --gold: #F5C518;
-      --gold-dark: #D4A800;
-      --black: #0A0A0A;
-      --dark: #111111;
-      --card-bg: #1A1A1A;
-      --border: #2A2A2A;
-      --text: #E8E8E8;
-      --text-muted: #999;
-      --white: #FFFFFF;
+    :root{
+      --bg:#070A12;
+      --bg2:#060815;
+      --surface:#0D1222;
+      --surface2:#0B1020;
+      --border:#1B2542;
+      --text:#F2F5FF;
+      --muted:#A7B2D6;
+      --muted2:#7E89AD;
+      --accent:#2F6BFF;
+      --accent2:#35E3A1;
+      --warn:#FFCC66;
+      --glow: rgba(47,107,255,.35);
+      --shadow: 0 18px 55px rgba(0,0,0,.55);
+      --shadow2: 0 10px 30px rgba(0,0,0,.45);
+      --radius: 18px;
+      --radius2: 14px;
+      --maxw: 1180px;
     }
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body {
-      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-      background: var(--black);
-      color: var(--text);
-      line-height: 1.6;
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(1200px 800px at 15% 10%, rgba(47,107,255,.20), transparent 55%),
+        radial-gradient(1000px 700px at 75% 25%, rgba(53,227,161,.10), transparent 60%),
+        radial-gradient(900px 650px at 60% 85%, rgba(47,107,255,.10), transparent 55%),
+        linear-gradient(180deg, var(--bg), var(--bg2));
+      overflow-x:hidden;
+    }
+    a{color:inherit; text-decoration:none}
+    button{font-family:inherit}
+
+    /* Subtle grain */
+    .grain{
+      pointer-events:none;
+      position:fixed;
+      inset:0;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.18'/%3E%3C/svg%3E");
+      mix-blend-mode:overlay;
+      opacity:.08;
+      z-index:1;
     }
 
-    /* WARNING BAR */
-    .warning-bar {
-      background: var(--gold);
-      color: #000;
-      text-align: center;
-      padding: 10px 20px;
-      font-size: 14px;
+    /* Warning Bar */
+    .warning-bar{
+      background: var(--warn);
+      color: #1a1200;
+      font-size: 13.5px;
       font-weight: 600;
+      text-align: center;
+      padding: 10px 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
       position: sticky;
       top: 0;
+      z-index: 200;
+      line-height: 1.4;
+    }
+    .warning-bar .wb-icon{ font-size: 15px; flex-shrink:0; }
+
+    /* Cookie Banner */
+    .cookie-banner{
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      background: rgba(7,10,18,.97);
+      border-top: 1px solid rgba(47,107,255,.30);
+      backdrop-filter: blur(18px);
+      padding: 18px 22px;
       z-index: 9999;
       display: flex;
       align-items: center;
-      justify-content: center;
-      gap: 8px;
-    }
-    .warning-bar span.icon { font-size: 16px; }
-
-    /* NAVIGATION */
-    nav {
-      background: rgba(10,10,10,0.95);
-      backdrop-filter: blur(10px);
-      border-bottom: 1px solid var(--border);
-      padding: 0 40px;
-      position: sticky;
-      top: 41px;
-      z-index: 1000;
-      display: flex;
-      align-items: center;
       justify-content: space-between;
-      height: 70px;
+      gap: 18px;
+      flex-wrap: wrap;
+      box-shadow: 0 -8px 40px rgba(0,0,0,.55);
+      transform: translateY(110%);
+      transition: transform 0.4s cubic-bezier(.4,0,.2,1);
     }
-    .nav-logo {
-      font-size: 22px;
-      font-weight: 800;
-      color: var(--white);
-      text-decoration: none;
-      letter-spacing: -0.5px;
-    }
-    .nav-logo span { color: var(--gold); }
-    .nav-links {
-      display: flex;
-      gap: 32px;
-      list-style: none;
-    }
-    .nav-links a {
-      color: var(--text-muted);
-      text-decoration: none;
-      font-size: 15px;
-      font-weight: 500;
-      transition: color 0.2s;
-    }
-    .nav-links a:hover { color: var(--gold); }
-    .nav-cta {
-      background: var(--gold);
-      color: #000 !important;
-      padding: 10px 22px;
-      border-radius: 8px;
-      font-weight: 700 !important;
-      font-size: 14px !important;
-      text-decoration: none;
-      transition: background 0.2s, transform 0.1s;
-    }
-    .nav-cta:hover { background: var(--gold-dark) !important; transform: translateY(-1px); }
+    .cookie-banner.show{ transform: translateY(0); }
+    .cookie-text{ flex: 1; min-width: 240px; }
+    .cookie-text h4{ color: var(--text); font-size: 14px; font-weight: 700; margin: 0 0 5px; }
+    .cookie-text p{ color: var(--muted); font-size: 13px; margin: 0; line-height: 1.55; }
+    .cookie-text a{ color: var(--accent); text-decoration: underline; cursor: pointer; }
+    .cookie-btns{ display: flex; gap: 10px; flex-shrink: 0; flex-wrap: wrap; }
+    .cookie-btns .btn{ white-space: nowrap; }
 
-    /* HERO */
-    .hero {
-      min-height: 90vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 80px 20px;
-      background: radial-gradient(ellipse at 50% 20%, rgba(245,197,24,0.08) 0%, transparent 60%);
-      position: relative;
-      overflow: hidden;
+    /* Layout helpers */
+    .wrap{max-width:var(--maxw); margin:0 auto; padding:0 22px}
+    .section{position:relative; padding:96px 0}
+    .section.compact{padding:72px 0}
+    .divider{
+      height:1px;
+      background: linear-gradient(90deg, transparent, rgba(47,107,255,.45), transparent);
+      opacity:.65;
+      margin:26px 0;
     }
-    .hero::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23F5C518' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+
+    /* Top nav */
+    .nav{
+      position:sticky;
+      top:41px;
+      z-index:50;
+      backdrop-filter: blur(14px);
+      background: rgba(7,10,18,.58);
+      border-bottom: 1px solid rgba(27,37,66,.55);
     }
-    .hero-content { position: relative; max-width: 800px; }
-    .hero-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: rgba(245,197,24,0.1);
-      border: 1px solid rgba(245,197,24,0.3);
-      color: var(--gold);
-      padding: 8px 18px;
-      border-radius: 50px;
-      font-size: 13px;
-      font-weight: 600;
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
-      margin-bottom: 30px;
+    .nav-inner{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:14px 0;
+      gap:18px;
     }
-    .hero h1 {
-      font-size: clamp(40px, 7vw, 72px);
-      font-weight: 900;
-      line-height: 1.05;
-      letter-spacing: -2px;
-      color: var(--white);
-      margin-bottom: 24px;
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      min-width: 220px;
     }
-    .hero h1 span { color: var(--gold); }
-    .hero p {
+    .brand-logo{
+      height:30px;
+      width:auto;
+      display:block;
+      filter: drop-shadow(0 10px 30px rgba(0,0,0,.35));
+    }
+    .brand-name{
+      font-family: Sora, Inter, system-ui, sans-serif;
+      letter-spacing:.2px;
+      font-weight:700;
+      font-size:16px;
+      line-height:1.1;
+    }
+    .brand-sub{color:var(--muted2); font-size:12.5px; margin-top:2px}
+    .nav-links{
+      display:flex;
+      gap:18px;
+      align-items:center;
+      color:var(--muted);
+      font-size:13.5px;
+      flex-wrap:wrap;
+      justify-content:center;
+    }
+    .nav-links a{
+      padding:8px 10px;
+      border-radius:10px;
+      transition: .18s ease;
+    }
+    .nav-links a:hover{
+      background: rgba(13,18,34,.55);
+      color:var(--text);
+      box-shadow: 0 0 0 1px rgba(27,37,66,.45) inset;
+    }
+    .nav-cta{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      min-width: 220px;
+      justify-content:flex-end;
+    }
+
+    /* Buttons */
+    .btn{
+      border: 1px solid rgba(27,37,66,.9);
+      background: rgba(13,18,34,.35);
+      color:var(--text);
+      padding:12px 14px;
+      border-radius: 14px;
+      cursor:pointer;
+      transition: .18s ease;
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      font-weight:600;
+      letter-spacing:.1px;
+      box-shadow: 0 10px 25px rgba(0,0,0,.25);
+      user-select:none;
+      white-space:nowrap;
+    }
+    .btn:hover{ transform: translateY(-1px); background: rgba(13,18,34,.55) }
+    .btn:active{ transform: translateY(0px) }
+    .btn.primary{
+      border-color: rgba(47,107,255,.55);
+      background: linear-gradient(135deg, rgba(47,107,255,.95), rgba(47,107,255,.55));
+      box-shadow: 0 14px 35px rgba(47,107,255,.18), 0 0 0 1px rgba(255,255,255,.08) inset;
+    }
+    .btn.primary:hover{
+      box-shadow: 0 18px 45px rgba(47,107,255,.22), 0 0 0 1px rgba(255,255,255,.10) inset;
+      filter: saturate(1.05);
+    }
+    .btn.ghost{
+      background: transparent;
+      border-color: rgba(27,37,66,.8);
+      box-shadow: none;
+    }
+    .btn.ghost:hover{
+      background: rgba(13,18,34,.45);
+      box-shadow: 0 0 0 1px rgba(27,37,66,.45) inset
+    }
+    .btn.small{ padding:10px 12px; border-radius: 12px; font-size:13.5px }
+    .btn.full{ width:100%; justify-content:center }
+    .icon{ width:18px; height:18px; display:inline-block; opacity:.95; }
+
+    /* Hero */
+    .hero{ padding:72px 0 0; position:relative; z-index:2; }
+    .hero-grid{
+      display:grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap:34px;
+      align-items:start;
+    }
+    .kicker{
+      display:inline-flex;
+      gap:10px;
+      align-items:center;
+      padding:8px 12px;
+      border-radius: 999px;
+      border:1px solid rgba(27,37,66,.7);
+      background: rgba(13,18,34,.35);
+      color: var(--muted);
+      font-size:13px;
+    }
+    .kicker .dot{
+      width:8px; height:8px; border-radius: 50%;
+      background: var(--accent2);
+      box-shadow: 0 0 18px rgba(53,227,161,.35);
+    }
+    h1{
+      font-family:Sora, Inter, system-ui, sans-serif;
+      font-size: clamp(40px, 4.2vw, 62px);
+      line-height:1.05;
+      margin:18px 0 12px;
+      letter-spacing: -0.8px;
+    }
+    .subhead{
+      color: var(--muted);
       font-size: 18px;
-      color: var(--text-muted);
-      max-width: 560px;
-      margin: 0 auto 40px;
-      line-height: 1.7;
+      line-height:1.7;
+      max-width: 58ch;
+      margin:0 0 22px;
     }
-    .hero-btns {
-      display: flex;
-      gap: 16px;
-      justify-content: center;
-      flex-wrap: wrap;
+    .hero-points{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:12px;
+      margin: 22px 0 26px;
     }
-    .btn-primary {
-      background: var(--gold);
-      color: #000;
-      padding: 16px 36px;
+    .point{
+      display:flex;
+      gap:12px;
+      align-items:flex-start;
+      padding:14px 14px;
+      border-radius: var(--radius2);
+      border:1px solid rgba(27,37,66,.7);
+      background: rgba(13,18,34,.30);
+    }
+    .point .badge{
+      width:28px; height:28px;
       border-radius: 10px;
-      font-size: 16px;
-      font-weight: 700;
-      text-decoration: none;
-      transition: all 0.2s;
-      display: inline-block;
+      background: rgba(47,107,255,.18);
+      border:1px solid rgba(47,107,255,.35);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      box-shadow: 0 12px 25px rgba(47,107,255,.08);
+      flex:0 0 auto;
     }
-    .btn-primary:hover { background: var(--gold-dark); transform: translateY(-2px); box-shadow: 0 8px 30px rgba(245,197,24,0.3); }
-    .btn-secondary {
-      background: transparent;
-      color: var(--text);
-      padding: 16px 36px;
-      border-radius: 10px;
-      font-size: 16px;
-      font-weight: 600;
-      text-decoration: none;
-      border: 1px solid var(--border);
-      transition: all 0.2s;
-      display: inline-block;
+    .point strong{display:block; font-size:14px; margin-bottom:3px}
+    .point span{display:block; color:var(--muted); font-size:13.5px; line-height:1.55}
+    .hero-actions{
+      display:flex;
+      gap:12px;
+      align-items:center;
+      flex-wrap:wrap;
     }
-    .btn-secondary:hover { border-color: var(--gold); color: var(--gold); }
-
-    /* SECTIONS */
-    section { padding: 100px 20px; }
-    .container { max-width: 1100px; margin: 0 auto; }
-    .section-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: rgba(245,197,24,0.08);
-      border: 1px solid rgba(245,197,24,0.2);
-      color: var(--gold);
-      padding: 6px 14px;
-      border-radius: 50px;
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      margin-bottom: 20px;
-    }
-    .section-title {
-      font-size: clamp(32px, 4vw, 48px);
-      font-weight: 800;
-      color: var(--white);
-      letter-spacing: -1px;
-      margin-bottom: 16px;
-    }
-    .section-title span { color: var(--gold); }
-    .section-sub {
-      font-size: 17px;
-      color: var(--text-muted);
-      max-width: 560px;
-      line-height: 1.7;
-      margin-bottom: 60px;
+    .micro{
+      margin-top:14px;
+      color: var(--muted2);
+      font-size: 13px;
+      line-height:1.6;
+      max-width: 60ch;
     }
 
-    /* SERVICES */
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 24px;
+    /* Mock chat */
+    .mock{
+      border-radius: 22px;
+      background: linear-gradient(180deg, rgba(13,18,34,.75), rgba(11,16,32,.55));
+      border: 1px solid rgba(27,37,66,.75);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      position:relative;
     }
-    .service-card {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 32px;
-      transition: all 0.3s;
-      position: relative;
-      overflow: hidden;
+    .mock:before{
+      content:"";
+      position:absolute;
+      inset:-2px;
+      background: radial-gradient(350px 220px at 40% 10%, rgba(47,107,255,.20), transparent 60%);
+      pointer-events:none;
     }
-    .service-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 2px;
-      background: linear-gradient(90deg, transparent, var(--gold), transparent);
-      opacity: 0;
-      transition: opacity 0.3s;
+    .mock-top{
+      padding:14px 14px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      border-bottom:1px solid rgba(27,37,66,.6);
+      background: rgba(7,10,18,.45);
     }
-    .service-card:hover { border-color: rgba(245,197,24,0.3); transform: translateY(-4px); }
-    .service-card:hover::before { opacity: 1; }
-    .service-icon {
-      width: 52px; height: 52px;
-      background: rgba(245,197,24,0.1);
+    .mock-top .left{ display:flex; gap:10px; align-items:center; }
+    .avatar{
+      width:34px; height:34px;
       border-radius: 12px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 24px;
-      margin-bottom: 20px;
+      background: linear-gradient(135deg, rgba(47,107,255,.65), rgba(255,255,255,.06));
+      border:1px solid rgba(255,255,255,.08);
     }
-    .service-card h3 {
-      font-size: 20px;
-      font-weight: 700;
-      color: var(--white);
-      margin-bottom: 12px;
+    .mock-top .title{ font-weight:700; font-size:13.5px; }
+    .mock-top .meta{ color:var(--muted2); font-size:12px; margin-top:2px; }
+    .pill{
+      font-size:12px;
+      color: var(--muted);
+      border:1px solid rgba(27,37,66,.75);
+      border-radius: 999px;
+      padding:7px 10px;
+      background: rgba(13,18,34,.35);
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
     }
-    .service-card p { color: var(--text-muted); line-height: 1.7; font-size: 15px; }
-
-    /* PROCESS */
-    .process-steps {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 32px;
-      position: relative;
-    }
-    .step {
-      text-align: center;
-      padding: 32px 24px;
-      background: var(--card-bg);
-      border: 1px solid var(--border);
+    .mock-body{ padding:16px 14px 12px; display:flex; flex-direction:column; gap:10px; }
+    .bubble{
+      max-width: 92%;
+      padding:12px 12px;
       border-radius: 16px;
-    }
-    .step-num {
-      width: 48px; height: 48px;
-      background: var(--gold);
-      color: #000;
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 18px; font-weight: 900;
-      margin: 0 auto 20px;
-    }
-    .step h3 { font-size: 18px; font-weight: 700; color: var(--white); margin-bottom: 12px; }
-    .step p { color: var(--text-muted); font-size: 14px; line-height: 1.6; }
-
-    /* RESULTS / STATS */
-    .stats-section {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 24px;
-      padding: 60px;
-    }
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 40px;
-      text-align: center;
-    }
-    .stat-num {
-      font-size: 52px;
-      font-weight: 900;
-      color: var(--gold);
-      line-height: 1;
-      margin-bottom: 8px;
-    }
-    .stat-label { color: var(--text-muted); font-size: 15px; }
-
-    /* PRICING */
-    .pricing-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 24px;
-    }
-    .pricing-card {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 40px 32px;
-      position: relative;
-    }
-    .pricing-card.featured {
-      border-color: var(--gold);
-      background: linear-gradient(135deg, #1A1A1A 0%, #1f1d0e 100%);
-    }
-    .featured-badge {
-      position: absolute;
-      top: -12px; left: 50%; transform: translateX(-50%);
-      background: var(--gold);
-      color: #000;
-      padding: 4px 18px;
-      border-radius: 50px;
-      font-size: 12px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-    .pricing-name { font-size: 22px; font-weight: 800; color: var(--white); margin-bottom: 8px; }
-    .pricing-desc { color: var(--text-muted); font-size: 14px; margin-bottom: 24px; }
-    .pricing-price { font-size: 42px; font-weight: 900; color: var(--gold); margin-bottom: 4px; }
-    .pricing-price span { font-size: 16px; color: var(--text-muted); font-weight: 500; }
-    .pricing-features { list-style: none; margin: 24px 0 32px; }
-    .pricing-features li {
-      padding: 10px 0;
-      border-bottom: 1px solid var(--border);
+      border:1px solid rgba(27,37,66,.65);
+      background: rgba(13,18,34,.35);
       color: var(--text);
-      font-size: 15px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
+      font-size:13.5px;
+      line-height:1.55;
     }
-    .pricing-features li::before { content: '✓'; color: var(--gold); font-weight: 700; }
+    .bubble.user{ align-self:flex-start; border-color: rgba(27,37,66,.75); background: rgba(13,18,34,.25); }
+    .bubble.ai{ align-self:flex-end; border-color: rgba(47,107,255,.35); background: rgba(47,107,255,.12); }
+    .bubble .small{ display:block; margin-top:8px; color: rgba(242,245,255,.78); font-size:12.5px; }
+    .quick{ display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end; padding: 0 14px 16px; }
+    .chip{
+      font-size:12.5px;
+      padding:8px 10px;
+      border-radius: 999px;
+      border:1px solid rgba(47,107,255,.35);
+      background: rgba(47,107,255,.10);
+      color: var(--text);
+      cursor:pointer;
+      transition:.18s ease;
+      user-select:none;
+    }
+    .chip:hover{ transform: translateY(-1px); background: rgba(47,107,255,.16) }
 
-    /* CTA SECTION */
-    .cta-section {
-      text-align: center;
-      background: radial-gradient(ellipse at center, rgba(245,197,24,0.08) 0%, transparent 60%);
-      border: 1px solid var(--border);
+    /* Trusted strip */
+    .trust-grid{ display:grid; grid-template-columns: repeat(3, 1fr); gap:14px; margin-top: 26px; }
+    .trust{
+      border-radius: var(--radius);
+      border:1px solid rgba(27,37,66,.7);
+      background: rgba(13,18,34,.28);
+      padding:16px 16px;
+      box-shadow: var(--shadow2);
+    }
+    .trust h3{ margin:0 0 8px; font-size:15px; font-weight:700; letter-spacing:.1px; }
+    .trust p{ margin:0; color:var(--muted); font-size:13.5px; line-height:1.6; }
+
+    /* Section headings */
+    .h2{
+      font-family:Sora, Inter, system-ui, sans-serif;
+      font-size: clamp(28px, 2.8vw, 40px);
+      line-height:1.15;
+      margin:0 0 12px;
+      letter-spacing:-.4px;
+    }
+    .lead{
+      margin:0 0 22px;
+      color:var(--muted);
+      font-size: 17px;
+      line-height:1.75;
+      max-width: 75ch;
+    }
+
+    /* Cards */
+    .grid-2{ display:grid; grid-template-columns: 1fr 1fr; gap:16px; }
+    .grid-3{ display:grid; grid-template-columns: repeat(3, 1fr); gap:16px; }
+    .card{
+      border-radius: var(--radius);
+      border:1px solid rgba(27,37,66,.72);
+      background: linear-gradient(180deg, rgba(13,18,34,.40), rgba(11,16,32,.28));
+      box-shadow: var(--shadow2);
+      padding:18px;
+      position:relative;
+      overflow:hidden;
+    }
+    .card:before{
+      content:"";
+      position:absolute;
+      inset:-2px;
+      background: radial-gradient(320px 200px at 20% 0%, rgba(47,107,255,.14), transparent 60%);
+      opacity:.65;
+      pointer-events:none;
+    }
+    .card h3{margin:0 0 8px; font-size:16px; font-weight:800}
+    .card p{margin:0; color:var(--muted); font-size:13.8px; line-height:1.65}
+    .card .tag{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:7px 10px;
+      border-radius: 999px;
+      border:1px solid rgba(47,107,255,.22);
+      background: rgba(47,107,255,.08);
+      color: rgba(242,245,255,.90);
+      font-size:12px;
+      margin-bottom:10px;
+    }
+
+    /* Split layout */
+    .split{ display:grid; grid-template-columns: 1.05fr .95fr; gap: 22px; align-items:start; }
+    .stack{display:flex; flex-direction:column; gap:14px}
+
+    /* Logo slot */
+    .logo-ph{
+      width: 160px; height: 44px;
+      border-radius: 12px;
+      border: 1px dashed rgba(167,178,214,.38);
+      background: rgba(13,18,34,.18);
+      display:flex; align-items:center; justify-content:center;
+      color: rgba(167,178,214,.95); font-size: 12px; letter-spacing: .8px;
+      text-transform: uppercase; user-select:none; overflow:hidden; padding: 6px;
+    }
+    .logo-ph svg{width:100%; height:100%; display:block}
+    .logo-slot{
+      width: 160px; height: 44px;
+      display:flex; align-items:center; justify-content:center;
+      user-select:none; overflow:hidden;
+    }
+    .logo-slot svg{width:100%; height:100%; display:block}
+    .logo-slot.header{ width: 132px; height: 34px; }
+
+    /* Pricing */
+    .pricing{ display:grid; grid-template-columns: 1.1fr .9fr; gap:16px; }
+    .price{
+      font-family:Sora, Inter, system-ui, sans-serif;
+      font-size: 34px; margin:10px 0 6px; letter-spacing:-.3px;
+    }
+    .price small{
+      display:block; font-family: Inter, system-ui, sans-serif;
+      color: var(--muted2); font-size: 13px; margin-top: 6px; line-height:1.6; letter-spacing: 0;
+    }
+    .list{
+      margin:12px 0 0; padding:0; list-style:none;
+      display:flex; flex-direction:column; gap:10px;
+      color:var(--muted); font-size: 13.7px; line-height:1.6;
+    }
+    .li{ display:flex; gap:10px; align-items:flex-start; }
+    .check{
+      width:18px; height:18px; border-radius: 8px;
+      display:inline-flex; align-items:center; justify-content:center;
+      background: rgba(53,227,161,.12); border:1px solid rgba(53,227,161,.25);
+      flex:0 0 auto; margin-top:2px;
+    }
+
+    /* FAQ */
+    details{
+      border-radius: var(--radius2);
+      border:1px solid rgba(27,37,66,.7);
+      background: rgba(13,18,34,.24);
+      padding:14px 14px;
+      box-shadow: var(--shadow2);
+    }
+    summary{ cursor:pointer; font-weight:700; outline:none; }
+    details p{ margin:10px 0 0; color:var(--muted); font-size: 13.7px; line-height:1.65; }
+    .faq{ display:flex; flex-direction:column; gap:12px; }
+
+    /* Booking */
+    .booking-shell{
       border-radius: 24px;
-      padding: 80px 40px;
+      border:1px solid rgba(27,37,66,.75);
+      background: linear-gradient(180deg, rgba(13,18,34,.55), rgba(11,16,32,.35));
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      position:relative;
     }
-    .cta-section h2 { font-size: clamp(32px, 4vw, 48px); font-weight: 900; color: var(--white); margin-bottom: 16px; letter-spacing: -1px; }
-    .cta-section p { color: var(--text-muted); font-size: 18px; max-width: 500px; margin: 0 auto 40px; }
+    .booking-shell:before{
+      content:"";
+      position:absolute; inset:-2px;
+      background:
+        radial-gradient(520px 340px at 30% 0%, rgba(47,107,255,.18), transparent 60%),
+        radial-gradient(420px 260px at 85% 40%, rgba(53,227,161,.10), transparent 60%);
+      pointer-events:none; opacity:.9;
+    }
+    .booking-head{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:14px; padding:18px 18px;
+      border-bottom:1px solid rgba(27,37,66,.65);
+      background: rgba(7,10,18,.35); position:relative; z-index:2;
+    }
+    .steps{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; color:var(--muted); font-size:13px; }
+    .step{
+      display:flex; align-items:center; gap:8px;
+      padding:7px 10px; border-radius: 999px;
+      border:1px solid rgba(27,37,66,.75); background: rgba(13,18,34,.22);
+    }
+    .step.active{ border-color: rgba(47,107,255,.45); background: rgba(47,107,255,.10); color: rgba(242,245,255,.92); }
+    .booking-body{
+      position:relative; z-index:2;
+      padding:18px 18px 18px;
+      display:grid; grid-template-columns: 1fr 1fr; gap:16px;
+    }
+    .panel{ border-radius: 18px; border:1px solid rgba(27,37,66,.7); background: rgba(13,18,34,.22); padding:16px; }
+    .panel h3{ margin:0 0 8px; font-size:16px; font-weight:800; }
+    .panel p{ margin:0 0 12px; color:var(--muted); font-size:13.5px; line-height:1.6; }
+    .note{ color: var(--muted2); font-size:12.8px; line-height:1.6; margin-top:10px; }
+    .tz-select{
+      appearance:none; -webkit-appearance:none; -moz-appearance:none;
+      background: transparent; border:none; outline:none;
+      color: rgba(242,245,255,.92); font-size:12px; font-weight:600;
+      padding:0 18px 0 0; line-height:1.2; cursor:pointer;
+    }
+    .tz-wrap{ position:relative; display:inline-flex; align-items:center; gap:8px; }
+    .tz-wrap:after{
+      content:"\u25BE"; position:absolute; right:0; top:50%; transform: translateY(-50%);
+      color: rgba(167,178,214,.95); font-size:12px; pointer-events:none; opacity:.9;
+    }
+    .cal-embed{
+      border-radius: 16px; border:1px solid rgba(27,37,66,.65);
+      background: rgba(7,10,18,.25); overflow:hidden; min-height: 620px;
+    }
+    .cal-embed > *{ width:100% !important; }
 
-    /* FOOTER */
-    footer {
-      background: var(--dark);
-      border-top: 1px solid var(--border);
-      padding: 60px 40px 30px;
+    /* Footer */
+    footer{
+      border-top: 1px solid rgba(27,37,66,.65);
+      background: rgba(7,10,18,.35);
+      padding: 28px 0;
     }
-    .footer-content {
-      max-width: 1100px;
-      margin: 0 auto;
+    .footer-inner{
+      display:flex; justify-content:space-between; align-items:flex-start;
+      gap:18px; flex-wrap:wrap;
     }
-    .footer-grid {
-      display: grid;
-      grid-template-columns: 2fr 1fr 1fr;
-      gap: 60px;
-      margin-bottom: 50px;
+    .footer-left{
+      display:flex; flex-direction:column; gap:8px;
+      color: var(--muted); font-size:13px; line-height:1.6; max-width: 62ch;
     }
-    .footer-brand h3 { font-size: 22px; font-weight: 800; color: var(--white); margin-bottom: 12px; }
-    .footer-brand h3 span { color: var(--gold); }
-    .footer-brand p { color: var(--text-muted); font-size: 14px; line-height: 1.7; max-width: 300px; }
-    .footer-col h4 { font-size: 14px; font-weight: 700; color: var(--white); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 20px; }
-    .footer-col ul { list-style: none; }
-    .footer-col ul li { margin-bottom: 10px; }
-    .footer-col ul li a { color: var(--text-muted); text-decoration: none; font-size: 14px; transition: color 0.2s; }
-    .footer-col ul li a:hover { color: var(--gold); }
-    .footer-bottom {
-      border-top: 1px solid var(--border);
-      padding-top: 24px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 12px;
+    .footer-links{
+      display:flex; gap:10px; align-items:center; flex-wrap:wrap;
+      color: var(--muted); font-size:13px;
     }
-    .footer-bottom p { color: var(--text-muted); font-size: 13px; }
-    .footer-legal { display: flex; gap: 20px; }
-    .footer-legal a { color: var(--text-muted); font-size: 13px; text-decoration: none; transition: color 0.2s; }
-    .footer-legal a:hover { color: var(--gold); }
+    .footer-links a{
+      padding:8px 10px; border-radius: 12px;
+      border:1px solid rgba(27,37,66,.75);
+      background: rgba(13,18,34,.22); transition:.18s ease;
+    }
+    .footer-links a:hover{
+      color: var(--text); border-color: rgba(47,107,255,.40); background: rgba(47,107,255,.10);
+    }
 
-    /* COOKIE BANNER */
-    .cookie-banner {
-      position: fixed;
-      bottom: 0; left: 0; right: 0;
-      background: #1a1a1a;
-      border-top: 2px solid var(--gold);
-      padding: 24px 40px;
-      z-index: 99999;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 24px;
-      flex-wrap: wrap;
-      box-shadow: 0 -8px 40px rgba(0,0,0,0.5);
-      transform: translateY(100%);
-      transition: transform 0.4s cubic-bezier(0.4,0,0.2,1);
+    /* Modal legal */
+    .modal{
+      position:fixed; inset:0;
+      background: rgba(0,0,0,.62);
+      display:none; align-items:center; justify-content:center;
+      padding: 22px; z-index: 120;
     }
-    .cookie-banner.show { transform: translateY(0); }
-    .cookie-text h4 { color: var(--white); font-size: 16px; font-weight: 700; margin-bottom: 6px; }
-    .cookie-text p { color: var(--text-muted); font-size: 13px; max-width: 600px; line-height: 1.5; }
-    .cookie-text a { color: var(--gold); text-decoration: none; }
-    .cookie-buttons { display: flex; gap: 12px; flex-shrink: 0; }
-    .cookie-accept {
-      background: var(--gold);
-      color: #000;
-      border: none;
-      padding: 12px 24px;
-      border-radius: 8px;
-      font-size: 14px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: background 0.2s;
+    .modal.open{display:flex}
+    .modal-card{
+      width:min(920px, 100%);
+      border-radius: 22px;
+      border:1px solid rgba(27,37,66,.85);
+      background: linear-gradient(180deg, rgba(13,18,34,.92), rgba(11,16,32,.88));
+      box-shadow: var(--shadow); overflow:hidden; position:relative;
     }
-    .cookie-accept:hover { background: var(--gold-dark); }
-    .cookie-decline {
-      background: transparent;
-      color: var(--text-muted);
-      border: 1px solid var(--border);
-      padding: 12px 24px;
-      border-radius: 8px;
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
+    .modal-head{
+      padding:16px 16px; border-bottom: 1px solid rgba(27,37,66,.65);
+      display:flex; align-items:center; justify-content:space-between;
+      gap:12px; background: rgba(7,10,18,.45);
     }
-    .cookie-decline:hover { border-color: var(--text-muted); color: var(--text); }
+    .modal-title{
+      font-family: Sora, Inter, system-ui, sans-serif;
+      font-size: 16px; font-weight: 700; letter-spacing: -.2px;
+    }
+    .modal-body{
+      padding:16px 16px 18px; color: var(--muted);
+      font-size: 13.8px; line-height: 1.7;
+      max-height: 70vh; overflow:auto;
+    }
+    .modal-body h4{ color: var(--text); margin: 18px 0 8px; font-size: 14.5px; font-weight: 800; }
+    .modal-body h3{ color: var(--text); margin: 22px 0 8px; font-size: 16px; font-weight: 800; }
+    .modal-body ul{ padding-left: 0; list-style: none; display: flex; flex-direction: column; gap: 6px; margin: 10px 0; }
+    .modal-body ul li{ padding-left: 16px; position: relative; }
+    .modal-body ul li::before{ content: '•'; position: absolute; left: 0; color: var(--accent); }
+    .modal-body .warn-note{
+      background: rgba(255,204,102,.08); border: 1px solid rgba(255,204,102,.25);
+      border-left: 3px solid var(--warn); border-radius: 8px;
+      padding: 10px 14px; margin: 12px 0; font-size: 13px; color: var(--muted);
+    }
+    .modal-body .info-table{ display: flex; flex-direction: column; gap: 0; margin: 12px 0; }
+    .modal-body .info-row{
+      display: flex; gap: 16px; padding: 9px 0;
+      border-bottom: 1px solid rgba(27,37,66,.5); font-size: 13.5px;
+    }
+    .modal-body .info-row:last-child{ border-bottom: none; }
+    .modal-body .info-label{ color: var(--muted2); min-width: 160px; font-size: 12.5px; }
+    .modal-body .info-val a{ color: var(--accent); text-decoration: underline; }
+    .modal-body code{
+      background: rgba(47,107,255,.10); border:1px solid rgba(47,107,255,.20);
+      padding:2px 6px; border-radius: 10px; color: rgba(242,245,255,.92);
+    }
 
-    /* MOBILE */
-    @media (max-width: 768px) {
-      nav { padding: 0 20px; }
-      .nav-links { display: none; }
-      .footer-grid { grid-template-columns: 1fr; gap: 40px; }
-      .stats-section { padding: 40px 24px; }
-      .cookie-banner { padding: 20px 24px; }
-      .cookie-buttons { width: 100%; justify-content: stretch; }
-      .cookie-accept, .cookie-decline { flex: 1; }
+    /* Responsive */
+    @media (max-width: 980px){
+      .hero-grid{grid-template-columns: 1fr; gap:18px}
+      .trust-grid{grid-template-columns:1fr}
+      .grid-2{grid-template-columns:1fr}
+      .grid-3{grid-template-columns:1fr}
+      .split{grid-template-columns:1fr}
+      .pricing{grid-template-columns:1fr}
+      .booking-body{grid-template-columns:1fr}
+      .nav-cta{min-width:auto}
+      .brand{min-width:auto}
+      .brand-logo{height:28px}
+      .cal-embed{min-height: 720px;}
+      .nav{ top: 41px; }
+      .cookie-banner{ padding: 14px 16px; }
     }
+    @media (max-width: 600px){
+      .warning-bar{ font-size: 12px; padding: 9px 16px; }
+    }
+
+    .anchor{scroll-margin-top: 96px;}
   </style>
 </head>
 <body>
+  <div class="grain"></div>
 
   <!-- WARNING BAR -->
-  <div class="warning-bar">
-    <span class="icon">⚠️</span>
-    <span>Diese Website befindet sich noch in Bearbeitung – einige Informationen könnten noch fehlen oder unvollständig sein.</span>
+  <div class="warning-bar" role="alert" aria-live="polite">
+    <span class="wb-icon" aria-hidden="true">⚠️</span>
+    <span>Diese Website befindet sich noch in Bearbeitung &ndash; einige Daten könnten noch fehlen oder unvollständig sein.</span>
   </div>
 
-  <!-- NAVIGATION -->
-  <nav>
-    <a href="#" class="nav-logo">Blitz<span>AI</span></a>
-    <ul class="nav-links">
-      <li><a href="#leistungen">Leistungen</a></li>
-      <li><a href="#prozess">Prozess</a></li>
-      <li><a href="#preise">Preise</a></li>
-      <li><a href="#kontakt">Kontakt</a></li>
-    </ul>
-    <a href="#kontakt" class="nav-cta">Jetzt starten</a>
-  </nav>
+  <!-- Reusable inline logo SVG -->
+  <template id="blitzaiLogo">
+    <svg viewBox="0 0 640 140" xmlns="http://www.w3.org/2000/svg" aria-label="BlitzAI Logo" role="img">
+      <defs>
+        <linearGradient id="aiBlue" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#8AD0FF"/>
+          <stop offset="1" stop-color="#2F6BFF"/>
+        </linearGradient>
+      </defs>
+      <text x="0" y="92"
+            font-family="Sora, Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif"
+            font-weight="700" font-size="96" letter-spacing="2" fill="#FFFFFF">BLITZ</text>
+      <text x="340" y="92"
+            font-family="Sora, Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif"
+            font-weight="700" font-size="96" letter-spacing="2" fill="url(#aiBlue)">AI</text>
+      <path d="M450 98 L415 138 L445 106 L430 106 L467 66 L450 98 Z" fill="url(#aiBlue)"/>
+    </svg>
+  </template>
+
+  <script>
+    function insertLogo(el, className, title) {
+      const t = document.getElementById('blitzaiLogo');
+      const node = t.content.firstElementChild.cloneNode(true);
+      if (className) node.setAttribute('class', className);
+      if (title) node.setAttribute('title', title);
+      el.appendChild(node);
+    }
+  </script>
+
+  <!-- NAV -->
+  <header class="nav">
+    <div class="wrap">
+      <div class="nav-inner">
+        <div class="brand" id="brandMount">
+          <div>
+            <div class="brand-name" style="display:none;">BlitzAI</div>
+            <div class="brand-sub">DMs, die Termine buchen.</div>
+          </div>
+        </div>
+        <nav class="nav-links" aria-label="Navigation">
+          <a href="#vorteile">Vorteile</a>
+          <a href="#funktion">Funktionen</a>
+          <a href="#ablauf">Ablauf</a>
+          <a href="#ergebnis">Ergebnisse</a>
+          <a href="#preise">Preise</a>
+          <a href="#faq">FAQ</a>
+        </nav>
+        <div class="nav-cta">
+          <a class="btn small ghost" href="#booking" data-scroll>Termin buchen</a>
+          <a class="btn small primary" href="#booking" data-scroll>
+            <span class="icon" aria-hidden="true">&#x26A1;</span> Demo sichern
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
 
   <!-- HERO -->
-  <section class="hero">
-    <div class="hero-content">
-      <div class="hero-badge">⚡ KI-Automatisierung für B2B</div>
-      <h1>Ihr Unternehmen.<br /><span>Automatisiert.</span> Skaliert.</h1>
-      <p>BlitzAI transformiert Ihre Kundenkommunikation mit intelligenter KI-Automatisierung – von Instagram DMs bis zur Terminbuchung, rund um die Uhr.</p>
-      <div class="hero-btns">
-        <a href="#kontakt" class="btn-primary">Kostenloses Erstgespräch →</a>
-        <a href="#leistungen" class="btn-secondary">Mehr erfahren</a>
+  <main class="hero">
+    <div class="wrap">
+      <div class="hero-grid">
+        <div>
+          <div class="kicker">
+            <span class="dot"></span>
+            <span>Für Salons &amp; Studios, die mehr Termine aus Instagram holen wollen</span>
+          </div>
+          <h1>Instagram-DMs, die buchen — auch wenn du gerade nicht am Handy bist.</h1>
+          <p class="subhead">
+            BlitzAI antwortet in Sekunden, erkennt die Absicht (Frage oder Termin), prüft live deinen Kalender und bucht, verschiebt oder storniert Termine automatisch 24/7, im Stil deines Unternehmens.
+          </p>
+          <div class="hero-actions">
+            <a class="btn primary" href="#booking" data-scroll>
+              <span class="icon" aria-hidden="true">📅</span> Kostenlose Demo buchen
+            </a>
+            <a class="btn ghost" href="#ablauf" data-scroll>
+              <span class="icon" aria-hidden="true">&#x25B6;</span> So funktioniert's
+            </a>
+          </div>
+          <div class="hero-points">
+            <div class="point">
+              <div class="badge" aria-hidden="true">⏱️</div>
+              <div>
+                <strong>Antworten in Sekunden</strong>
+                <span>Jede Anfrage wird sofort aufgefangen.</span>
+              </div>
+            </div>
+            <div class="point">
+              <div class="badge" aria-hidden="true">🗓️</div>
+              <div>
+                <strong>Termine automatisch managen</strong>
+                <span>Verfügbarkeit prüfen, passende Zeiten vorschlagen, buchen &amp; bestätigen — direkt in DM.</span>
+              </div>
+            </div>
+            <div class="point">
+              <div class="badge" aria-hidden="true">🧠</div>
+              <div>
+                <strong>Wie eine trainierte Rezeption</strong>
+                <span>Unser automatisierter KI-Agent ist auf Ihre Geschäftsprozesse trainiert und kennt alle relevanten Informationen, um Anfragen vollständig und zuverlässig zu beantworten..</span>
+              </div>
+            </div>
+          </div>
+          <p class="micro">
+            Wir übernehmen die komplette Technik und alle Prozesse im Hintergrund. Im Onboarding klären wir alle relevanten Punkte für Setup und KI Training, damit der Agent exakt zu deinem Business passt. Sobald er live ist, kannst du uns jederzeit schreiben und bei Bedarf ein Meeting vereinbaren, wenn du Abläufe verändern oder das Ergebnis weiter optimieren willst. Wir sind jederzeit erreichbar, helfen schnell weiter und setzen Anpassungen auf Wunsch rund um die Uhr um.
+          </p>
+          <div style="margin-top:18px; display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
+            <div class="logo-slot logoMount"></div>
+            <div class="logo-slot logoMount"></div>
+            <div class="logo-slot logoMount"></div>
+          </div>
+        </div>
+
+        <aside class="mock" aria-label="DM Beispiel">
+          <div class="mock-top">
+            <div class="left">
+              <div class="avatar" aria-hidden="true"></div>
+              <div>
+                <div class="title">Instagram DMs</div>
+                <div class="meta">Beispiel: Kunde → BlitzAI</div>
+              </div>
+            </div>
+            <div class="pill">Live-Buchung</div>
+          </div>
+          <div class="mock-body">
+            <div class="bubble user">Hi! Kann ich morgen um 17:00 für Nägel kommen?</div>
+            <div class="bubble ai">
+              Klar 😊 Welche Behandlung möchtest du genau?
+              <span class="small">Zur Auswahl stehen Auffüllen, Neuset oder Maniküre.</span>
+            </div>
+            <div class="bubble user">Alles klar 😊 Dann Auffüllen!</div>
+            <div class="bubble ai">
+              Perfekt. Ich hab kurz nachgeschaut: um 17:00 ist leider nichts frei, aber ich hätte morgen noch 16:30 oder 17:15 verfügbar. Welche Zeit passt dir besser?
+              <span class="small"></span>
+            </div>
+          </div>
+        </aside>
+      </div>
+
+      <div class="trust-grid" id="vorteile">
+        <div class="trust">
+          <h3>Mehr Buchungen aus den gleichen Anfragen</h3>
+          <p>Weil Interessenten sofort eine klare Antwort und konkrete Zeiten bekommen.</p>
+        </div>
+        <div class="trust">
+          <h3>Weniger Inbox-Stress</h3>
+          <p>Keine vergessenen Nachrichten, keine Doppelbuchungen durch Hektik.</p>
+        </div>
+        <div class="trust">
+          <h3>Mehr Professionalität im Alltag</h3>
+          <p>Der Ton ist freundlich, knapp und konsistent genau so, wie du es vorgegeben hast.</p>
+        </div>
+      </div>
+      <div class="divider"></div>
+    </div>
+  </main>
+  <!-- PROBLEM -->
+  <section class="section compact anchor" id="funktion">
+    <div class="wrap">
+      <h2 class="h2">Die meisten Studios verlieren Termine nicht wegen Qualität, sondern wegen Reaktionszeit.</h2>
+      <p class="lead">
+        Menschen schreiben dann, wenn sie Zeit haben. Oft abends, früh morgens oder am Wochenende. Wenn in dem Moment niemand reagiert, wird einfach das nächste Studio angeschrieben.
+      </p>
+      <div class="grid-2">
+        <div class="card">
+          <div class="tag">⚠️ After-Hours Buchungen</div>
+          <h3>Du bist offline — deine Kunden nicht.</h3>
+          <p>Ein großer Teil der Buchungen passiert außerhalb der Öffnungszeiten. Ohne "always-on" Buchung bist du für viele Interessenten schlicht nicht erreichbar.</p>
+          <div style="margin-top:14px;"></div>
+        </div>
+        <div class="card">
+          <div class="tag">⏳ Langsame DMs</div>
+          <h3>Wer in Minuten antwortet, gewinnt den Termin.</h3>
+          <p>Wenn jemand 2–3 Salons anschreibt, bucht er meistens dort, wo sofort Klarheit entsteht. Nicht, weil es "besser" ist, sondern weil es schneller ist.</p>
+          <div style="margin-top:14px;"></div>
+        </div>
+        <div class="card">
+          <div class="tag">🪑 No-Shows &amp; späte Absagen</div>
+          <h3>Leere Slots</h3>
+          <p>Jeder No-Show kostet Umsatz und blockiert wertvolle Zeit. Automatische Erinnerungen und unkomplizierte Umbuchungen per DM senken die Ausfallquote messbar.</p>
+          <div style="margin-top:14px;"></div>
+        </div>
+        <div class="card">
+          <div class="tag">📞 Telefon &amp; DM-Chaos</div>
+          <h3>Admin-Zeit skaliert nicht — Termine schon.</h3>
+          <p>Rückfragen, Kalender-Abgleich, Bestätigungen: Das ist nötig, aber kein Umsatztreiber. BlitzAI übernimmt den Ablauf, damit dein Team beim Service bleibt.</p>
+          <div style="margin-top:14px;"></div>
+        </div>
+      </div>
+      <div style="margin-top:22px; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+        <p class="note" style="margin:0">Quellenhinweise können im Footer verlinkt werden (z. B. Book Salon / SalonToday / HubSpot / Fresha).</p>
+        <a class="btn primary" href="#booking" data-scroll>Jetzt Demo buchen</a>
       </div>
     </div>
   </section>
 
-  <!-- SERVICES -->
-  <section id="leistungen">
-    <div class="container">
-      <div class="section-badge">⚡ Leistungen</div>
-      <h2 class="section-title">KI-Lösungen, die <span>wirklich arbeiten</span></h2>
-      <p class="section-sub">Wir automatisieren Ihre Kommunikation und Prozesse – damit Sie sich auf das Wesentliche konzentrieren können.</p>
-      <div class="services-grid">
-        <div class="service-card">
-          <div class="service-icon">📩</div>
-          <h3>Instagram DM Automatisierung</h3>
-          <p>Intelligente Intent-Erkennung analysiert eingehende Nachrichten und leitet sie automatisch weiter – ohne manuelle Eingriffe, 24/7.</p>
-        </div>
-        <div class="service-card">
-          <div class="service-icon">🤖</div>
-          <h3>FAQ-Automatisierung</h3>
-          <p>Automatisierte Antworten auf häufige Anfragen reduzieren Ihren Support-Aufwand drastisch und verbessern die Kundenzufriedenheit.</p>
-        </div>
-        <div class="service-card">
-          <div class="service-icon">📅</div>
-          <h3>Terminbuchung & Kalender</h3>
-          <p>Nahtlose Integration mit Cal.com und Google Calendar – Kunden buchen direkt, automatisch und ohne Rückfragen.</p>
-        </div>
-        <div class="service-card">
-          <div class="service-icon">⚙️</div>
-          <h3>Prozess-Routing</h3>
-          <p>Individuelle Automatisierungsworkflows, die Anfragen intelligent klassifizieren und an die richtigen Stellen weiterleiten.</p>
-        </div>
-        <div class="service-card">
-          <div class="service-icon">📊</div>
-          <h3>Kommunikations-Workflows</h3>
-          <p>Maßgeschneiderte Multi-Step-Workflows für Ihre gesamte Kundenkommunikation – von der ersten Anfrage bis zum Abschluss.</p>
-        </div>
-        <div class="service-card">
-          <div class="service-icon">🔧</div>
-          <h3>Setup & Wartung</h3>
-          <p>Vollständige Einrichtung, Konfiguration und laufende Optimierung Ihrer KI-Automatisierungslösungen aus einer Hand.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- PROCESS -->
-  <section id="prozess" style="background: rgba(26,26,26,0.5);">
-    <div class="container">
-      <div class="section-badge">🔄 Prozess</div>
-      <h2 class="section-title">In 4 Schritten zu Ihrer <span>Automatisierung</span></h2>
-      <p class="section-sub">Von der ersten Analyse bis zum laufenden System – schnell, unkompliziert, ergebnisorientiert.</p>
-      <div class="process-steps">
-        <div class="step">
-          <div class="step-num">1</div>
-          <h3>Erstgespräch</h3>
-          <p>Kostenlose Analyse Ihrer aktuellen Prozesse und Ziele in einem 30-minütigen Gespräch.</p>
-        </div>
-        <div class="step">
-          <div class="step-num">2</div>
-          <h3>Konzeption</h3>
-          <p>Individuelle Erstellung Ihres Automatisierungskonzepts basierend auf Ihren spezifischen Anforderungen.</p>
-        </div>
-        <div class="step">
-          <div class="step-num">3</div>
-          <h3>Einrichtung</h3>
-          <p>Technische Umsetzung, Konfiguration und Testing aller Automatisierungslösungen.</p>
-        </div>
-        <div class="step">
-          <div class="step-num">4</div>
-          <h3>Optimierung</h3>
-          <p>Kontinuierliche Überwachung und Verbesserung Ihrer Systeme für maximale Performance.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- STATS -->
-  <section>
-    <div class="container">
-      <div class="stats-section">
-        <div class="stats-grid">
-          <div>
-            <div class="stat-num">24/7</div>
-            <div class="stat-label">Automatisierter Betrieb</div>
+  <!-- SOLUTION -->
+  <section class="section anchor" id="ablauf">
+    <div class="wrap">
+      <div class="split">
+        <div>
+          <h2 class="h2">BlitzAI ist dein KI-Mitarbeiter für die Rezeption – direkt in Instagram.</h2>
+          <p class="lead">
+            BlitzAI reagiert sofort, fragt gezielt nach fehlenden Details und führt Interessenten sauber zum Termin. Kurz, freundlich, professionell - alles im stil von deinen business.
+          </p>
+          <div class="stack">
+            <div class="card">
+              <div class="tag">🧭 Intelligentes Routing</div>
+              <h3>Frage oder Buchung? BlitzAI erkennt es automatisch.</h3>
+              <p>Preise, Services, Dauer, Standort, Policies: Antworten kommen direkt. Wenn jemand buchen will, startet automatisch der Termin-Flow.</p>
+            </div>
+            <div class="card">
+              <div class="tag">🗓️ Live-Verfügbarkeit</div>
+              <h3>Konkrete Zeiten statt endloser Rückfragen.</h3>
+              <p>BlitzAI prüft die Verfügbarkeit im Kalender, schlägt passende Slots vor und bucht nach Bestätigung. Umbuchen und Stornieren laufen genauso schnell und einfach.</p>
+            </div>
+            <div class="card">
+              <div class="tag">🎯 Saubere Daten</div>
+              <h3>Wichtige Infos werden automatisch erfasst.</h3>
+              <p>Name, Service, Wunschzeit, Notizen — alles wird direkt ins Kalenderevent übernommen, damit du nichts nachfragen musst und die Infos nicht irgendwo zusammensuchen musst.</p>
+            </div>
+            <div style="display:flex; gap:12px; flex-wrap:wrap;">
+              <a class="btn primary" href="#booking" data-scroll>Demo buchen</a>
+              <a class="btn ghost" href="#preise" data-scroll>Preise ansehen</a>
+            </div>
           </div>
-          <div>
-            <div class="stat-num">90%</div>
-            <div class="stat-label">Reduzierung manueller Anfragen</div>
-          </div>
-          <div>
-            <div class="stat-num">&lt;60s</div>
-            <div class="stat-label">Durchschnittliche Antwortzeit</div>
-          </div>
-          <div>
-            <div class="stat-num">100%</div>
-            <div class="stat-label">Maßgeschneiderte Lösungen</div>
+        </div>
+        <div>
+          <div class="card" style="padding:20px;">
+            <div class="tag">⚡ Ablauf in 3 Schritten</div>
+            <h3>In wenigen Tagen live.</h3>
+            <p>Kein kompliziertes Projekt. Klarer Prozess, sauber umgesetzt.</p>
+            <div class="divider"></div>
+            <div class="li">
+              <div class="check" aria-hidden="true">✓</div>
+              <div>
+                <strong>1) Verbinden</strong>
+                <div class="note" style="margin-top:4px;">Instagram + Kalender (z. B. Google Calendar) werden angebunden.</div>
+              </div>
+            </div>
+            <div class="li">
+              <div class="check" aria-hidden="true">✓</div>
+              <div>
+                <strong>2) Einstellen</strong>
+                <div class="note" style="margin-top:4px;">Services, Preise, Dauer, Regeln, Ton — exakt so, wie du arbeitest.</div>
+              </div>
+            </div>
+            <div class="li">
+              <div class="check" aria-hidden="true">✓</div>
+              <div>
+                <strong>3) Aktivieren</strong>
+                <div class="note" style="margin-top:4px;">Ab jetzt laufen DMs, Terminbuchungen und Bestätigungen automatisch.</div>
+              </div>
+            </div>
+            <div style="margin-top:16px;">
+              <a class="btn full primary" href="#booking" data-scroll>Demo buchen (15 Min.)</a>
+              <div class="note"></div>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </section>
 
+  <!-- RESULTS -->
+  <section class="section anchor" id="ergebnis">
+    <div class="wrap">
+      <h2 class="h2">Was sich in der Praxis verändert</h2>
+      <p class="lead">BlitzAI ersetzt keine gute Arbeit. Es sorgt dafür, dass gute Arbeit auch gebucht wird. Du bekommst mehr Klarheit, weniger Stress und einen sauberen Ablauf.</p>
+      <div class="grid-3">
+        <div class="card">
+          <div class="tag">📈 Mehr Buchungen</div>
+          <h3>Kein "Warten" mehr.</h3>
+          <p>Interessenten bekommen sofort Antworten und konkrete Zeiten.</p>
+          <div style="margin-top:14px;"></div>
+        </div>
+        <div class="card">
+          <div class="tag">🧘 Weniger Admin-Last</div>
+          <h3>Inbox ruhig, Kalender sauber.</h3>
+          <p>Weniger Rückfragen, weniger manuelles Buchen, weniger Fehler unter Stress.</p>
+          <div style="margin-top:14px;"></div>
+        </div>
+        <div class="card">
+          <div class="tag">✅ Besserer Ablauf</div>
+          <h3>Professionell, konsistent, freundlich.</h3>
+          <p>Der Ton bleibt gleich, auch wenn du gerade voll im Service bist oder Feierabend hast.</p>
+          <div style="margin-top:14px;"></div>
+        </div>
+      </div>
+      <div style="margin-top:18px; display:flex; gap:12px; align-items:center; justify-content:space-between; flex-wrap:wrap;">
+        <p class="note" style="margin:0"></p>
+        <a class="btn primary" href="#booking" data-scroll>15-Min-Demo buchen</a>
+      </div>
+    </div>
+  </section>
   <!-- PRICING -->
-  <section id="preise" style="background: rgba(26,26,26,0.3);">
-    <div class="container">
-      <div class="section-badge">💼 Preise</div>
-      <h2 class="section-title">Transparente <span>Preisgestaltung</span></h2>
-      <p class="section-sub">Flexible Pakete für Unternehmen jeder Größe. Alle Preise auf Anfrage – individuell auf Ihre Bedürfnisse abgestimmt.</p>
-      <div class="pricing-grid">
-        <div class="pricing-card">
-          <div class="pricing-name">Starter</div>
-          <div class="pricing-desc">Ideal für den Einstieg in die KI-Automatisierung</div>
-          <div class="pricing-price">Auf Anfrage<span></span></div>
-          <ul class="pricing-features">
-            <li>Instagram DM Automatisierung</li>
-            <li>FAQ-Bot Einrichtung</li>
-            <li>Bis zu 3 Workflows</li>
-            <li>E-Mail Support</li>
-            <li>Monatliches Reporting</li>
+  <section class="section anchor" id="preise">
+    <div class="wrap">
+      <h2 class="h2">Preise</h2>
+      <p class="lead"></p>
+      <div class="pricing">
+        <div class="card">
+          <div class="tag">⚡ Einrichtung (einmalig)</div>
+          <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-top:10px;">
+            <div class="pill" style="border-color: rgba(255,204,102,.35); background: rgba(255,204,102,.10); color: rgba(242,245,255,.92);">
+              🔥 Aktion: -40% auf Einrichtung
+            </div>
+            <div class="pill" style="border-color: rgba(53,227,161,.30); background: rgba(53,227,161,.10); color: rgba(242,245,255,.92);">
+              Nur für kurze Zeit
+            </div>
+          </div>
+          <div class="price" style="display:flex; align-items:baseline; gap:12px; flex-wrap:wrap;">
+            <span style="color: rgba(167,178,214,.85); text-decoration: line-through; text-decoration-thickness: 2px; text-decoration-color: rgba(255,255,255,.45); font-size: 18px; font-weight: 700;">
+              €399
+            </span>
+            <span style="display:inline-flex; align-items:baseline; gap:10px;">
+              <span>€249</span>
+              <span class="pill" style="border-color: rgba(47,107,255,.45); background: rgba(47,107,255,.10); color: rgba(242,245,255,.92);">
+                Du sparst €150
+              </span>
+            </span>
+          </div>
+          <p>Setup, Anbindung, Training, Tests und Go-Live. Wir stellen BlitzAI so ein, dass es zu deinem Ablauf passt.</p>
+          <ul class="list">
+            <li class="li"><span class="check" aria-hidden="true">✓</span><span>Instagram DM-Flow + Ton &amp; Stil</span></li>
+            <li class="li"><span class="check" aria-hidden="true">✓</span><span>Services, Preise, Dauer, Regeln</span></li>
+            <li class="li"><span class="check" aria-hidden="true">✓</span><span>Kalender-Anbindung &amp; Slot-Logik</span></li>
+            <li class="li"><span class="check" aria-hidden="true">✓</span><span>Qualitäts-Check + Live-Schaltung</span></li>
           </ul>
-          <a href="#kontakt" class="btn-secondary" style="display:block; text-align:center; width:100%;">Anfragen</a>
+          <div style="margin-top:16px;">
+            <a class="btn full primary" href="#booking" data-scroll>Demo buchen</a>
+            <div class="note">Im Call klären wir, ob es für dein Studio passt.</div>
+          </div>
         </div>
-        <div class="pricing-card featured">
-          <div class="featured-badge">Beliebt</div>
-          <div class="pricing-name">Professional</div>
-          <div class="pricing-desc">Für wachsende Unternehmen mit höherem Bedarf</div>
-          <div class="pricing-price">Auf Anfrage<span></span></div>
-          <ul class="pricing-features">
-            <li>Alles aus Starter</li>
-            <li>Terminbuchung & Kalender</li>
-            <li>Unbegrenzte Workflows</li>
-            <li>Priorität Support</li>
-            <li>Wöchentliches Reporting</li>
-            <li>Prozess-Routing</li>
+        <div class="card">
+          <div class="tag">🔁 Monatlich</div>
+          <div class="price">€69/mo <small>base bot · Nutzung, Wartung, Updates, Support</small></div>
+          <p>BlitzAI läuft kontinuierlich weiter, wird gepflegt und bei Bedarf angepasst (z. B. neue Services, neue Regeln).</p>
+          <ul class="list">
+            <li class="li"><span class="check" aria-hidden="true">✓</span><span>Monitoring &amp; Support bei Fragen</span></li>
+            <li class="li"><span class="check" aria-hidden="true">✓</span><span>Updates &amp; Optimierungen</span></li>
+            <li class="li"><span class="check" aria-hidden="true">✓</span><span>Stabile Automations-Infrastruktur</span></li>
+            <li class="li"><span class="check" aria-hidden="true">✓</span><span>Optionale Reminder-Flows</span></li>
           </ul>
-          <a href="#kontakt" class="btn-primary" style="display:block; text-align:center; width:100%;">Anfragen</a>
-        </div>
-        <div class="pricing-card">
-          <div class="pricing-name">Enterprise</div>
-          <div class="pricing-desc">Vollständige Automatisierungslösung für große Teams</div>
-          <div class="pricing-price">Individuell<span></span></div>
-          <ul class="pricing-features">
-            <li>Alles aus Professional</li>
-            <li>Individuelle Entwicklung</li>
-            <li>Dedizierter Account Manager</li>
-            <li>24/7 Support</li>
-            <li>AVV & DSGVO-konform</li>
-            <li>SLA-Garantie</li>
-          </ul>
-          <a href="#kontakt" class="btn-secondary" style="display:block; text-align:center; width:100%;">Anfragen</a>
+          <div style="margin-top:16px;">
+            <a class="btn full ghost" href="#booking" data-scroll>Termin wählen</a>
+            <div class="note">Dauer: 15 Minuten · Online</div>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- CTA / CONTACT -->
-  <section id="kontakt">
-    <div class="container">
-      <div class="cta-section">
-        <div class="section-badge">📅 Termin buchen</div>
-        <h2>Bereit für Ihre <span style="color:var(--gold);">KI-Automatisierung?</span></h2>
-        <p>Buchen Sie jetzt Ihr kostenloses Erstgespräch und erfahren Sie, wie BlitzAI Ihr Unternehmen transformieren kann.</p>
-        <a href="mailto:hello@blitzai.tech" class="btn-primary" style="font-size:17px; padding: 18px 44px;">Jetzt Termin buchen →</a>
-        <p style="margin-top: 20px; font-size: 14px; color: var(--text-muted);">Oder schreiben Sie uns direkt: <a href="mailto:hello@blitzai.tech" style="color:var(--gold); text-decoration:none;">hello@blitzai.tech</a></p>
+  <!-- FAQ -->
+  <section class="section anchor" id="faq">
+    <div class="wrap">
+      <h2 class="h2">FAQ</h2>
+      <p class="lead"></p>
+      <div class="faq">
+        <details>
+          <summary>Klingt das für Kunden wie ein Bot?</summary>
+          <p>Nein. Ton und Stil werden an dein Studio angepasst. BlitzAI schreibt kurz, freundlich und konkret — wie eine gute Rezeption.</p>
+        </details>
+        <details>
+          <summary>Kann ich steuern, welche Zeiten angeboten werden?</summary>
+          <p>Ja. Du legst Verfügbarkeit, Dauer, Pufferzeiten und Regeln fest. BlitzAI schlägt nur Slots vor, die wirklich passen.</p>
+        </details>
+        <details>
+          <summary>Was passiert, wenn Kunden unklare Nachrichten schreiben?</summary>
+          <p>BlitzAI fragt gezielt nach den fehlenden Informationen (z. B. Service, Datum, Uhrzeit)</p>
+        </details>
+        <details>
+          <summary>Funktioniert das bei mehreren Mitarbeitern?</summary>
+          <p>Ja, solange die Verfügbarkeit sauber im Kalender abgebildet ist (ein oder mehrere Kalender, je nach Setup).</p>
+        </details>
+        <details>
+          <summary>Wie schnell sind wir live?</summary>
+          <p>Das stimmen wir individuell mit jedem Business ab — normalerweise dauert das komplette Setup inkl. KI-Training auf euer Business etwa 10–14 Tage.</p>
+        </details>
+      </div>
+      <div style="margin-top:18px; display:flex; gap:12px; flex-wrap:wrap; align-items:center; justify-content:space-between;">
+        <p class="note" style="margin:0">Du willst es einfach einmal sehen? Wir zeigen dir den Ablauf live.</p>
+        <a class="btn primary" href="#booking" data-scroll>Demo buchen</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- BOOKING -->
+  <section class="section anchor" id="booking">
+    <div class="wrap">
+      <h2 class="h2">Demo buchen</h2>
+      <p class="lead">Wähle einen Termin aus. Danach kurz deine Daten — fertig. Keine langen Formulare, kein Hin-und-Her.</p>
+      <div class="booking-shell" role="region" aria-label="Buchung">
+        <div class="booking-head">
+          <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+            <div class="logo-slot header logoMount" title="BlitzAI"></div>
+            <div class="pill">Dauer: 30 Minuten · Online</div>
+            <div class="pill" title="Zeitzone auswählen">
+              <span style="opacity:.95;">Zeitzone:</span>
+              <span class="tz-wrap">
+                <select id="tzSelect" class="tz-select" aria-label="Zeitzone">
+                  <option value="auto">Automatisch</option>
+                  <option value="Europe/Berlin">Europe/Berlin</option>
+                  <option value="Europe/London">Europe/London</option>
+                  <option value="Europe/Paris">Europe/Paris</option>
+                  <option value="America/New_York">America/New_York</option>
+                  <option value="America/Chicago">America/Chicago</option>
+                  <option value="America/Los_Angeles">America/Los_Angeles</option>
+                  <option value="Asia/Dubai">Asia/Dubai</option>
+                  <option value="Asia/Kolkata">Asia/Kolkata</option>
+                  <option value="Asia/Tokyo">Asia/Tokyo</option>
+                  <option value="Australia/Sydney">Australia/Sydney</option>
+                </select>
+              </span>
+            </div>
+          </div>
+          <div class="steps" aria-label="Schritte"></div>
+        </div>
+        <div class="booking-body">
+          <div class="panel" id="panelSlots">
+            <h3>1) Termin auswählen</h3>
+            <p>Wähle einen freien Slot im Kalender. Cal.com ist mit deinem Kalender synchronisiert (keine Doppelbuchungen).</p>
+            <div class="divider"></div>
+            <div id="calEmbed" class="cal-embed" aria-label="Cal.com Buchung"></div>
+            <div class="note" id="calFallbackNote" style="margin-top:12px;">
+              Falls dein Browser Embeds blockt: <a class="btn small ghost" id="openCalBtn" href="https://cal.com/blitzai/30min" target="_blank" rel="noopener">In neuem Tab öffnen</a>
+            </div>
+          </div>
+          <div class="panel">
+            <h3>Was du in 15 Minuten bekommst</h3>
+            <p>Ein klarer Blick, ob BlitzAI für dein Studio sofort Sinn macht.</p>
+            <div class="divider"></div>
+            <div class="li">
+              <div class="check" aria-hidden="true">✓</div>
+              <div>
+                <strong>Kurzer Check deines aktuellen Ablaufs</strong>
+                <div class="note" style="margin-top:4px;">Wo gehen DMs verloren, wo entsteht Pingpong, wo entstehen No-Shows?</div>
+              </div>
+            </div>
+            <div class="li">
+              <div class="check" aria-hidden="true">✓</div>
+              <div>
+                <strong>Live-Demo am Beispiel-Flow</strong>
+                <div class="note" style="margin-top:4px;">Fragen beantworten, Slots vorschlagen, buchen, bestätigen.</div>
+              </div>
+            </div>
+            <div class="li">
+              <div class="check" aria-hidden="true">✓</div>
+              <div>
+                <strong>Konkrete Next Steps</strong>
+                <div class="note" style="margin-top:4px;">Wenn es passt: Setup-Plan. Wenn nicht: klare Empfehlung.</div>
+              </div>
+            </div>
+            <div class="divider"></div>
+            <a class="btn full primary" href="#booking" data-scroll>Jetzt Slot wählen</a>
+            <div class="note">Kostenloser Demo-Call · Keine Verpflichtung</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section class="section compact">
+    <div class="wrap">
+      <div class="card" style="padding:24px;">
+        <div class="tag">⚡ Abschluss</div>
+        <h2 class="h2" style="margin-top:6px;">Wenn du Instagram ernst nimmst, brauchst du schnelle Antworten.</h2>
+        <p class="lead" style="margin-bottom:16px;">
+          BlitzAI sorgt dafür, dass Anfragen nicht liegen bleiben — und dass Buchungen nicht davon abhängen, ob gerade jemand Zeit hat.
+        </p>
+        <div style="display:flex; gap:12px; flex-wrap:wrap;">
+          <a class="btn primary" href="#booking" data-scroll>Demo buchen</a>
+          <a class="btn ghost" href="#preise" data-scroll>Preise ansehen</a>
+        </div>
       </div>
     </div>
   </section>
 
   <!-- FOOTER -->
   <footer>
-    <div class="footer-content">
-      <div class="footer-grid">
-        <div class="footer-brand">
-          <h3>Blitz<span>AI</span></h3>
-          <p>KI-gestützte Automatisierungslösungen für moderne Unternehmen. Wir automatisieren Ihre Kommunikation – damit Sie skalieren können.</p>
+    <div class="wrap">
+      <div class="footer-inner">
+        <div class="footer-left">
+          <div style="display:flex; align-items:center; gap:10px;" id="footerBrandMount">
+            <div style="font-weight:800; color:var(--text); display:none;">BlitzAI</div>
+          </div>
+          <div>
+            &copy; <span id="year"></span> BlitzAI. Alle Rechte vorbehalten. <br/>
+            <span style="color:var(--muted2)"></span>
+          </div>
+          <div style="color:var(--muted2)">
+            Quellen (optional): Book Salon / SalonToday / HubSpot / Fresha / Convince &amp; Convert — Links können hier ergänzt werden.
+          </div>
         </div>
-        <div class="footer-col">
-          <h4>Unternehmen</h4>
-          <ul>
-            <li><a href="#leistungen">Leistungen</a></li>
-            <li><a href="#prozess">Prozess</a></li>
-            <li><a href="#preise">Preise</a></li>
-            <li><a href="#kontakt">Kontakt</a></li>
-          </ul>
-        </div>
-        <div class="footer-col">
-          <h4>Rechtliches</h4>
-          <ul>
-            <li><a href="datenschutz.html">Datenschutzerklärung</a></li>
-            <li><a href="agb.html">AGB</a></li>
-            <li><a href="impressum.html">Impressum</a></li>
-          </ul>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        <p>© 2026 BlitzAI GbR. Alle Rechte vorbehalten.</p>
-        <div class="footer-legal">
-          <a href="datenschutz.html">Datenschutz</a>
-          <a href="agb.html">AGB</a>
-          <a href="impressum.html">Impressum</a>
+        <div class="footer-links">
+          <a href="#" data-legal="impressum">Impressum</a>
+          <a href="#" data-legal="datenschutz">Datenschutz</a>
+          <a href="#" data-legal="agb">AGB</a>
         </div>
       </div>
     </div>
   </footer>
-
-  <!-- COOKIE BANNER -->
-  <div class="cookie-banner" id="cookieBanner">
+  <!-- Cookie Banner -->
+  <div class="cookie-banner" id="cookieBanner" role="dialog" aria-live="polite" aria-label="Cookie-Einwilligung">
     <div class="cookie-text">
       <h4>🍪 Diese Website verwendet Cookies</h4>
-      <p>Wir verwenden technisch notwendige Cookies für den sicheren Betrieb dieser Website. Weitere Informationen finden Sie in unserer <a href="datenschutz.html">Datenschutzerklärung</a>. Derzeit verwenden wir keine Analyse- oder Marketing-Cookies.</p>
+      <p>Wir nutzen technisch notwendige Cookies für den sicheren Betrieb dieser Website. Derzeit verwenden wir keine Analyse- oder Marketing-Cookies. Weitere Infos in unserer <a href="#" data-legal="datenschutz">Datenschutzerklärung</a>.</p>
     </div>
-    <div class="cookie-buttons">
-      <button class="cookie-decline" onclick="closeCookieBanner(false)">Nur notwendige</button>
-      <button class="cookie-accept" onclick="closeCookieBanner(true)">Verstanden &amp; Akzeptieren</button>
+    <div class="cookie-btns">
+      <button class="btn small ghost" type="button" onclick="closeCookieBanner(false)">Nur notwendige</button>
+      <button class="btn small primary" type="button" onclick="closeCookieBanner(true)">Verstanden &amp; Akzeptieren</button>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal" id="legalModal" role="dialog" aria-modal="true" aria-label="Rechtliches">
+    <div class="modal-card">
+      <div class="modal-head">
+        <div class="modal-title" id="legalTitle">Rechtliches</div>
+        <button class="btn small ghost" type="button" id="closeLegalBtn">Schließen</button>
+      </div>
+      <div class="modal-body" id="legalBody">
+        <h4>Platzhalter</h4>
+        <p>Inhalte werden geladen...</p>
+      </div>
     </div>
   </div>
 
   <script>
-    // Cookie Banner Logic
+    // Inject header logo
+    (function(){
+      const brandMount = document.getElementById('brandMount');
+      const logoWrap = document.createElement('div');
+      insertLogo(logoWrap, 'brand-logo', 'BlitzAI');
+      brandMount.insertBefore(logoWrap.firstElementChild, brandMount.firstElementChild);
+    })();
+
+    // Inject all logo placeholders
+    document.querySelectorAll('.logoMount').forEach(el => {
+      insertLogo(el, null, 'BlitzAI');
+    });
+
+    // Footer logo
+    (function(){
+      const footerMount = document.getElementById('footerBrandMount');
+      const holder = document.createElement('div');
+      insertLogo(holder, 'brand-logo', 'BlitzAI');
+      footerMount.insertBefore(holder.firstElementChild, footerMount.firstElementChild);
+    })();
+
+    // Year
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    // Smooth scroll
+    document.querySelectorAll('[data-scroll]').forEach(a => {
+      a.addEventListener('click', (e) => {
+        const href = a.getAttribute('href') || '';
+        if (!href.startsWith('#')) return;
+        const el = document.querySelector(href);
+        if (!el) return;
+        e.preventDefault();
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+
+    // ========================
+    // Legal modal content
+    // ========================
+    const legalModal = document.getElementById("legalModal");
+    const legalTitle = document.getElementById("legalTitle");
+    const legalBody  = document.getElementById("legalBody");
+    const closeLegalBtn = document.getElementById("closeLegalBtn");
+
+    const legalContent = {
+      impressum: {
+        title: "Impressum",
+        body: `<h4>Platzhalter — Impressum</h4><p>Füge hier deine vollständigen Impressumsangaben ein.</p>`
+      },
+      datenschutz: {
+        title: "Datenschutzerklärung",
+        body: `<p style="color:var(--muted2); font-size:12px; margin-bottom:18px;">Stand: 26.03.2026</p>
+<h3>1. Verantwortlicher</h3>
+<div class="info-table">
+  <div class="info-row"><span class="info-label">Name</span><span class="info-val">BlitzAI GbR</span></div>
+  <div class="info-row"><span class="info-label">Anschrift</span><span class="info-val">[STRASSE, PLZ ORT], Deutschland</span></div>
+  <div class="info-row"><span class="info-label">E-Mail (allgemein)</span><span class="info-val"><a href="mailto:hello@blitzai.tech">hello@blitzai.tech</a></span></div>
+  <div class="info-row"><span class="info-label">E-Mail (Datenschutz)</span><span class="info-val"><a href="mailto:privacy@blitzai.tech">privacy@blitzai.tech</a></span></div>
+</div>
+<h3>2. Zwecke und Rechtsgrundlagen</h3>
+<p>Wir verarbeiten personenbezogene Daten nur, soweit dies für den Betrieb unserer Website, die Bearbeitung von Anfragen oder die Durchführung vorvertraglicher Maßnahmen erforderlich ist. Maßgebliche Rechtsgrundlagen sind:</p>
+<ul>
+  <li>Art. 6 Abs. 1 lit. f DSGVO – Berechtigtes Interesse (z. B. sicherer Website-Betrieb, Fehleranalyse)</li>
+  <li>Art. 6 Abs. 1 lit. b DSGVO – Vorvertragliche/vertragliche Maßnahmen (z. B. Terminbuchung, Angebotsanfrage)</li>
+  <li>Art. 6 Abs. 1 lit. a DSGVO – Einwilligung (z. B. nicht notwendige Cookies, sofern künftig eingesetzt)</li>
+</ul>
+<h3>3. Zugriffsdaten / Server-Logfiles</h3>
+<p>Beim Aufruf unserer Website erfasst der Hosting-Anbieter automatisch technische Zugriffsdaten in sogenannten Server-Logfiles. Diese umfassen insbesondere:</p>
+<ul>
+  <li>IP-Adresse des anfragenden Geräts</li>
+  <li>Datum und Uhrzeit des Abrufs</li>
+  <li>Aufgerufene Seite oder Datei</li>
+  <li>Browsertyp/-version und Betriebssystem</li>
+  <li>Referrer-URL (vorherige Seite)</li>
+</ul>
+<p>Zweck: Gewährleistung von Stabilität und Sicherheit des Betriebs sowie Abwehr von Angriffen.</p>
+<p>Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO.</p>
+<div class="warn-note">⚠ Speicherdauer: [z. B. 7, 14 oder 30 Tage] — bitte mit Hosting-Anbieter abstimmen und hier einsetzen.</div>
+<h3>4. Kontaktaufnahme per E-Mail</h3>
+<p>Kontaktieren Sie uns per E-Mail, verarbeiten wir die von Ihnen übermittelten Daten (Name, E-Mail-Adresse, Nachrichteninhalt) ausschließlich zur Bearbeitung Ihrer Anfrage.</p>
+<p>Zweck: Kommunikation, Anfragenbearbeitung, Angebotsunterbreitung.</p>
+<p>Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO (vorvertraglich) bzw. Art. 6 Abs. 1 lit. f DSGVO.</p>
+<p>Speicherdauer: Bis zum abschließenden Abschluss der Anfrage; danach nach Maßgabe gesetzlicher Aufbewahrungspflichten (Handels-/Steuerrecht) oder interner Löschfristen.</p>
+<h3>5. Terminbuchung über Cal.com</h3>
+<p>Wir bieten die Möglichkeit, Termine über den externen Dienst Cal.com zu buchen. Dabei werden – je nach Konfiguration – insbesondere folgende Daten verarbeitet:</p>
+<ul>
+  <li>Name und E-Mail-Adresse</li>
+  <li>Gewünschter Termin / Zeitslot</li>
+  <li>Optionale Notizen / Anliegen</li>
+  <li>Technische Metadaten (z. B. Buchungszeitpunkt; IP-Adresse kann technisch anfallen)</li>
+</ul>
+<p>Zweck: Terminorganisation, Durchführung vorvertraglicher Kommunikation.</p>
+<p>Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO.</p>
+<p>Empfänger: Cal.com, Inc. (als externer Dienstleister / ggf. Auftragsverarbeiter).</p>
+<p>Datenübermittlung in Drittländer: Je nach Konfiguration des Anbieters kann eine Verarbeitung außerhalb der EU/des EWR erfolgen. Sofern erforderlich, wird die Übermittlung über geeignete Garantien (insb. EU-Standardvertragsklauseln) abgesichert. Weitere Informationen entnehmen Sie bitte der Datenschutzerklärung von Cal.com.</p>
+<div class="warn-note">⚠ Link zur Cal.com-Datenschutzerklärung im Footer/Datenschutzbereich ergänzen.</div>
+<h3>6. Cookies</h3>
+<p>Unsere Website kann technisch notwendige Cookies einsetzen (z. B. für Session-Sicherheit oder grundlegende Funktionen des Buchungstools). Eine Einwilligung ist hierfür nicht erforderlich.</p>
+<p>Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse).</p>
+<p>Tracking / Marketing: Wir verwenden derzeit keine Analyse- oder Marketing-Cookies (kein Google Analytics, kein Meta Pixel). Sollte sich dies ändern, werden wir Sie vorab informieren und ggf. Ihre Einwilligung einholen.</p>
+<h3>7. Externe Dienstleister und Empfänger</h3>
+<p>Für den Betrieb der Website und der Buchungsfunktion setzen wir externe Dienstleister ein (z. B. Hosting, Cal.com). Diese sind, soweit sie personenbezogene Daten in unserem Auftrag verarbeiten, vertraglich zur Einhaltung der DSGVO verpflichtet.</p>
+<h3>8. Ihre Rechte als betroffene Person</h3>
+<p>Gegenüber uns stehen Ihnen folgende Rechte zu:</p>
+<ul>
+  <li>Auskunft über gespeicherte Daten (Art. 15 DSGVO)</li>
+  <li>Berichtigung unrichtiger Daten (Art. 16 DSGVO)</li>
+  <li>Löschung / „Recht auf Vergessenwerden" (Art. 17 DSGVO)</li>
+  <li>Einschränkung der Verarbeitung (Art. 18 DSGVO)</li>
+  <li>Datenübertragbarkeit (Art. 20 DSGVO)</li>
+  <li>Widerspruch gegen Verarbeitungen auf Basis berechtigter Interessen (Art. 21 DSGVO)</li>
+</ul>
+<h3>9. Datenschutzkontakt</h3>
+<p>Für alle Datenschutzanfragen erreichen Sie uns unter:</p>
+<p>E-Mail: <a href="mailto:privacy@blitzai.tech">privacy@blitzai.tech</a></p>
+<h3>[Optional] Kontaktformular</h3>
+<p>Sofern auf unserer Website ein Kontaktformular verfügbar ist, verarbeiten wir die dort eingegebenen Daten (Name, E-Mail-Adresse, Nachricht) ausschließlich zur Bearbeitung Ihrer Anfrage.</p>
+<p>Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO (vorvertraglich) bzw. Art. 6 Abs. 1 lit. f DSGVO.</p>
+<p>Speicherdauer: wie unter Ziffer 4 beschrieben.</p>
+<p>Dieser Abschnitt ist nur aktiv, wenn ein Kontaktformular eingebunden ist.</p>`
+      },
+      agb: {
+        title: "Allgemeine Geschäftsbedingungen (B2B)",
+        body: `<p style="color:var(--muted2); font-size:12px; margin-bottom:18px;">Stand: 26.03.2026</p>
+<h3>§ 1 — Geltungsbereich und B2B-Beschränkung</h3>
+<p>Diese Allgemeinen Geschäftsbedingungen (AGB) gelten für alle Leistungen der BlitzAI GbR gegenüber ihren Kunden.</p>
+<p>Unser Angebot richtet sich ausschließlich an Unternehmer im Sinne von § 14 BGB. Verbraucher im Sinne von § 13 BGB sind nicht Zielgruppe dieser Website oder der angebotenen Leistungen. Ein Vertragsschluss mit Verbrauchern ist ausgeschlossen.</p>
+<p>Entgegenstehende oder abweichende AGB des Kunden gelten nur, wenn BlitzAI diesen ausdrücklich schriftlich zugestimmt hat.</p>
+<h3>§ 2 — Leistungsgegenstand</h3>
+<p>BlitzAI erbringt Dienstleistungen zur Konzeption, Einrichtung, Konfiguration, Wartung und Optimierung KI-gestützter Automatisierungslösungen, insbesondere:</p>
+<ul>
+  <li>Verarbeitung und Routing von Kundenanfragen über Instagram Direct Messages (Intent-Erkennung)</li>
+  <li>Automatisierte FAQ-Antworten und Kommunikationsworkflows</li>
+  <li>Terminlogik und Buchungsintegration (z. B. via Cal.com / Google Calendar)</li>
+  <li>Prozess-Routing und individuelle Automatisierungsszenarien</li>
+</ul>
+<p>Der konkrete Leistungsumfang ergibt sich aus dem jeweiligen Angebot oder der Leistungsbeschreibung.</p>
+<h3>§ 3 — Mitwirkungspflichten des Kunden</h3>
+<p>Der Kunde stellt BlitzAI sämtliche für die Leistungserbringung erforderlichen Inhalte, Informationen und Zugangsdaten vollständig und korrekt zur Verfügung (z. B. Preislisten, Services, Öffnungszeiten, Policies, Buchungsregeln, Kalenderverfügbarkeiten). Änderungen sind BlitzAI unverzüglich mitzuteilen.</p>
+<p>Unzureichende oder unrichtige Angaben können die Leistungsqualität beeinträchtigen; eine Haftung von BlitzAI in diesem Fall ist ausgeschlossen.</p>
+<h3>§ 4 — Vergütung und Zahlungsbedingungen</h3>
+<p>Vergütung, Fälligkeit und Zahlungsmodalitäten ergeben sich aus dem individuellen Angebot oder Vertrag.</p>
+<div class="warn-note">⚠ Zahlungsziel: [z. B. 7 oder 14 Tage] netto ab Rechnungsdatum einsetzen.</div>
+<p>Bei Zahlungsverzug ist BlitzAI berechtigt, Verzugszinsen in gesetzlicher Höhe (§ 288 BGB) zu berechnen.</p>
+<h3>§ 5 — Laufzeit und Kündigung</h3>
+<p>Laufzeit und Kündigungsfristen ergeben sich aus dem jeweiligen Angebot oder Vertrag. Soweit dort keine Regelung getroffen wird, gilt eine Mindestlaufzeit von einem Monat mit einer Kündigungsfrist von 14 Tagen zum Monatsende.</p>
+<h3>§ 6 — Haftung / Keine Erfolgsgarantie</h3>
+<p>(1) BlitzAI haftet bei Vorsatz und grober Fahrlässigkeit unbeschränkt.</p>
+<p>(2) Bei einfacher Fahrlässigkeit haftet BlitzAI nur bei Verletzung wesentlicher Vertragspflichten (Kardinalpflichten) und beschränkt auf den typischerweise vorhersehbaren, vertragstypischen Schaden.</p>
+<p>(3) Eine Haftung für entgangenen Gewinn, mittelbare Schäden oder Folgeschäden ist ausgeschlossen, soweit gesetzlich zulässig.</p>
+<p>(4) Keine Erfolgsgarantie: BlitzAI schuldet keinem bestimmten Umsatz, Leads oder sonstigen Ergebnisse. Ergebnisse sind von Faktoren abhängig, die außerhalb des Einflussbereichs von BlitzAI liegen (z. B. Angebot und Nachfrage, Plattform-Restriktionen, Inhalte und Qualität der Kundendaten).</p>
+<h3>§ 7 — Drittanbieter und Plattformabhängigkeit</h3>
+<p>Soweit Leistungen von Drittplattformen abhängen (insb. Meta/Instagram, Cal.com, Google, ManyChat, Make.com, OpenAI), übernimmt BlitzAI keine Haftung für deren Verfügbarkeit, Änderungen der Plattformbedingungen oder sonstige Umstände, die außerhalb des Einflussbereichs von BlitzAI liegen.</p>
+<h3>§ 8 — Datenschutz und Auftragsverarbeitung</h3>
+<p>Soweit BlitzAI im Rahmen der Leistungserbringung personenbezogene Daten im Auftrag des Kunden verarbeitet, wird bei Vertragsschluss ein Auftragsverarbeitungsvertrag (AVV) gemäß Art. 28 DSGVO bereitgestellt und unterzeichnet. Weiteres ergibt sich aus dem AVV.</p>
+<h3>§ 9 — Vertraulichkeit</h3>
+<p>Beide Vertragsparteien verpflichten sich, Geschäfts- und Betriebsgeheimnisse der jeweils anderen Partei vertraulich zu behandeln und nicht an Dritte weiterzugeben. Diese Verpflichtung gilt auch nach Beendigung des Vertragsverhältnisses fort.</p>`
+      }
+    };
+
+    function openLegal(key) {
+      const item = legalContent[key];
+      if (!item) return;
+      legalTitle.textContent = item.title;
+      legalBody.innerHTML = item.body;
+      legalModal.classList.add('open');
+    }
+
+    document.querySelectorAll('[data-legal]').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        openLegal(link.getAttribute('data-legal'));
+      });
+    });
+
+    const closeLegal = () => legalModal.classList.remove('open');
+    closeLegalBtn.addEventListener('click', closeLegal);
+    legalModal.addEventListener('click', (e) => { if (e.target === legalModal) closeLegal(); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLegal(); });
+
+    // =========================
+    // Cookie Banner
+    // =========================
     function closeCookieBanner(accepted) {
-      document.getElementById('cookieBanner').style.display = 'none';
+      document.getElementById('cookieBanner').classList.remove('show');
+      setTimeout(() => { document.getElementById('cookieBanner').style.display = 'none'; }, 400);
       localStorage.setItem('cookieConsent', accepted ? 'accepted' : 'declined');
     }
+
+    // Re-bind cookie banner datenschutz link after it's in DOM
+    document.querySelector('#cookieBanner [data-legal="datenschutz"]').addEventListener('click', (e) => {
+      e.preventDefault();
+      openLegal('datenschutz');
+    });
+
     window.addEventListener('load', function() {
       if (!localStorage.getItem('cookieConsent')) {
         setTimeout(function() {
           document.getElementById('cookieBanner').classList.add('show');
-        }, 800);
+        }, 900);
       }
     });
 
-    // Smooth scroll
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', function(e) {
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-          e.preventDefault();
-          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    // =========================
+    // Cal.com embed
+    // =========================
+    const CAL_PUBLIC_LINK = "blitzai/30min";
+    const openCalBtn = document.getElementById("openCalBtn");
+    const tzSelect = document.getElementById("tzSelect");
+    const calEmbedEl = document.getElementById("calEmbed");
+
+    function detectTZ(){
+      try{ return Intl.DateTimeFormat().resolvedOptions().timeZone || "Europe/Berlin"; }
+      catch(e){ return "Europe/Berlin"; }
+    }
+
+    function buildCalLink(tz){
+      return CAL_PUBLIC_LINK + "?timezone=" + encodeURIComponent(tz);
+    }
+
+    (function (C, A, L) {
+      let p = function (a, ar) { a.q.push(ar); };
+      let d = C.document;
+      C.Cal = C.Cal || function () {
+        let cal = C.Cal;
+        let ar = arguments;
+        if (!cal.loaded) {
+          cal.ns = {};
+          cal.q = cal.q || [];
+          d.head.appendChild(d.createElement("script")).src = A;
+          cal.loaded = true;
         }
+        if (ar[0] === L) {
+          const api = function () { p(api, arguments); };
+          const namespace = ar[1];
+          api.q = api.q || [];
+          if (typeof namespace === "string") {
+            cal.ns[namespace] = cal.ns[namespace] || api;
+            p(cal.ns[namespace], ar);
+            p(cal, ["initNamespace", namespace]);
+          } else p(cal, ar);
+          return;
+        }
+        p(cal, ar);
+      };
+    })(window, "https://app.cal.com/embed/embed.js", "init");
+
+    function renderCal(tz){
+      calEmbedEl.innerHTML = "";
+      const url = "https://cal.com/" + CAL_PUBLIC_LINK + "?timezone=" + encodeURIComponent(tz);
+      openCalBtn.setAttribute("href", url);
+      window.Cal("init", { origin: "https://cal.com" });
+      window.Cal("inline", {
+        elementOrSelector: "#calEmbed",
+        calLink: buildCalLink(tz),
+        config: { layout: "month_view" }
       });
-    });
+      window.Cal("ui", {
+        styles: { branding: { brandColor: "#2F6BFF" } },
+        hideEventTypeDetails: false,
+        layout: "month_view"
+      });
+    }
+
+    (function(){
+      const auto = detectTZ();
+      const opts = Array.from(tzSelect.options).map(o => o.value);
+      if (opts.includes(auto)) tzSelect.value = auto;
+      else tzSelect.value = "auto";
+      const initialTZ = (tzSelect.value === "auto") ? auto : tzSelect.value;
+      renderCal(initialTZ);
+      tzSelect.addEventListener("change", () => {
+        const tz = (tzSelect.value === "auto") ? detectTZ() : tzSelect.value;
+        renderCal(tz);
+      });
+    })();
   </script>
 </body>
 </html>
