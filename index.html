@@ -43,8 +43,6 @@
     }
     a{color:inherit; text-decoration:none}
     button{font-family:inherit}
-
-    /* Subtle grain */
     .grain{
       pointer-events:none;
       position:fixed;
@@ -54,53 +52,6 @@
       opacity:.08;
       z-index:1;
     }
-
-    /* Warning Bar */
-    .warning-bar{
-      background: var(--warn);
-      color: #1a1200;
-      font-size: 13.5px;
-      font-weight: 600;
-      text-align: center;
-      padding: 10px 22px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      position: sticky;
-      top: 0;
-      z-index: 200;
-      line-height: 1.4;
-    }
-    .warning-bar .wb-icon{ font-size: 15px; flex-shrink:0; }
-
-    /* Cookie Banner */
-    .cookie-banner{
-      position: fixed;
-      bottom: 0; left: 0; right: 0;
-      background: rgba(7,10,18,.97);
-      border-top: 1px solid rgba(47,107,255,.30);
-      backdrop-filter: blur(18px);
-      padding: 18px 22px;
-      z-index: 9999;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 18px;
-      flex-wrap: wrap;
-      box-shadow: 0 -8px 40px rgba(0,0,0,.55);
-      transform: translateY(110%);
-      transition: transform 0.4s cubic-bezier(.4,0,.2,1);
-    }
-    .cookie-banner.show{ transform: translateY(0); }
-    .cookie-text{ flex: 1; min-width: 240px; }
-    .cookie-text h4{ color: var(--text); font-size: 14px; font-weight: 700; margin: 0 0 5px; }
-    .cookie-text p{ color: var(--muted); font-size: 13px; margin: 0; line-height: 1.55; }
-    .cookie-text a{ color: var(--accent); text-decoration: underline; cursor: pointer; }
-    .cookie-btns{ display: flex; gap: 10px; flex-shrink: 0; flex-wrap: wrap; }
-    .cookie-btns .btn{ white-space: nowrap; }
-
-    /* Layout helpers */
     .wrap{max-width:var(--maxw); margin:0 auto; padding:0 22px}
     .section{position:relative; padding:96px 0}
     .section.compact{padding:72px 0}
@@ -110,11 +61,23 @@
       opacity:.65;
       margin:26px 0;
     }
-
-    /* Top nav */
+    /* Warning stripe */
+    .warning-stripe{
+      position:relative;
+      z-index:100;
+      background: linear-gradient(90deg, #a87800, #FFCC66, #a87800);
+      color:#1a1000;
+      text-align:center;
+      padding:10px 22px;
+      font-size:14px;
+      font-weight:700;
+      letter-spacing:.1px;
+      box-shadow: 0 2px 12px rgba(255,204,102,.25);
+    }
+    .warning-stripe a{color:#1a1000; text-decoration:underline;}
     .nav{
       position:sticky;
-      top:41px;
+      top:0;
       z-index:50;
       backdrop-filter: blur(14px);
       background: rgba(7,10,18,.58);
@@ -173,8 +136,6 @@
       min-width: 220px;
       justify-content:flex-end;
     }
-
-    /* Buttons */
     .btn{
       border: 1px solid rgba(27,37,66,.9);
       background: rgba(13,18,34,.35);
@@ -215,8 +176,6 @@
     .btn.small{ padding:10px 12px; border-radius: 12px; font-size:13.5px }
     .btn.full{ width:100%; justify-content:center }
     .icon{ width:18px; height:18px; display:inline-block; opacity:.95; }
-
-    /* Hero */
     .hero{ padding:72px 0 0; position:relative; z-index:2; }
     .hero-grid{
       display:grid;
@@ -295,8 +254,6 @@
       line-height:1.6;
       max-width: 60ch;
     }
-
-    /* Mock chat */
     .mock{
       border-radius: 22px;
       background: linear-gradient(180deg, rgba(13,18,34,.75), rgba(11,16,32,.55));
@@ -367,8 +324,6 @@
       user-select:none;
     }
     .chip:hover{ transform: translateY(-1px); background: rgba(47,107,255,.16) }
-
-    /* Trusted strip */
     .trust-grid{ display:grid; grid-template-columns: repeat(3, 1fr); gap:14px; margin-top: 26px; }
     .trust{
       border-radius: var(--radius);
@@ -379,8 +334,6 @@
     }
     .trust h3{ margin:0 0 8px; font-size:15px; font-weight:700; letter-spacing:.1px; }
     .trust p{ margin:0; color:var(--muted); font-size:13.5px; line-height:1.6; }
-
-    /* Section headings */
     .h2{
       font-family:Sora, Inter, system-ui, sans-serif;
       font-size: clamp(28px, 2.8vw, 40px);
@@ -395,8 +348,6 @@
       line-height:1.75;
       max-width: 75ch;
     }
-
-    /* Cards */
     .grid-2{ display:grid; grid-template-columns: 1fr 1fr; gap:16px; }
     .grid-3{ display:grid; grid-template-columns: repeat(3, 1fr); gap:16px; }
     .card{
@@ -430,54 +381,79 @@
       font-size:12px;
       margin-bottom:10px;
     }
-
-    /* Split layout */
     .split{ display:grid; grid-template-columns: 1.05fr .95fr; gap: 22px; align-items:start; }
     .stack{display:flex; flex-direction:column; gap:14px}
-
-    /* Logo slot */
     .logo-ph{
-      width: 160px; height: 44px;
+      width: 160px;
+      height: 44px;
       border-radius: 12px;
       border: 1px dashed rgba(167,178,214,.38);
       background: rgba(13,18,34,.18);
-      display:flex; align-items:center; justify-content:center;
-      color: rgba(167,178,214,.95); font-size: 12px; letter-spacing: .8px;
-      text-transform: uppercase; user-select:none; overflow:hidden; padding: 6px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color: rgba(167,178,214,.95);
+      font-size: 12px;
+      letter-spacing: .8px;
+      text-transform: uppercase;
+      user-select:none;
+      overflow:hidden;
+      padding: 6px;
     }
     .logo-ph svg{width:100%; height:100%; display:block}
     .logo-slot{
-      width: 160px; height: 44px;
-      display:flex; align-items:center; justify-content:center;
-      user-select:none; overflow:hidden;
+      width: 160px;
+      height: 44px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      user-select:none;
+      overflow:hidden;
     }
     .logo-slot svg{width:100%; height:100%; display:block}
-    .logo-slot.header{ width: 132px; height: 34px; }
-
-    /* Pricing */
+    .logo-slot.header{
+      width: 132px;
+      height: 34px;
+    }
     .pricing{ display:grid; grid-template-columns: 1.1fr .9fr; gap:16px; }
     .price{
       font-family:Sora, Inter, system-ui, sans-serif;
-      font-size: 34px; margin:10px 0 6px; letter-spacing:-.3px;
+      font-size: 34px;
+      margin:10px 0 6px;
+      letter-spacing:-.3px;
     }
     .price small{
-      display:block; font-family: Inter, system-ui, sans-serif;
-      color: var(--muted2); font-size: 13px; margin-top: 6px; line-height:1.6; letter-spacing: 0;
+      display:block;
+      font-family: Inter, system-ui, sans-serif;
+      color: var(--muted2);
+      font-size: 13px;
+      margin-top: 6px;
+      line-height:1.6;
+      letter-spacing: 0;
     }
     .list{
-      margin:12px 0 0; padding:0; list-style:none;
-      display:flex; flex-direction:column; gap:10px;
-      color:var(--muted); font-size: 13.7px; line-height:1.6;
+      margin:12px 0 0;
+      padding:0;
+      list-style:none;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      color:var(--muted);
+      font-size: 13.7px;
+      line-height:1.6;
     }
     .li{ display:flex; gap:10px; align-items:flex-start; }
     .check{
-      width:18px; height:18px; border-radius: 8px;
-      display:inline-flex; align-items:center; justify-content:center;
-      background: rgba(53,227,161,.12); border:1px solid rgba(53,227,161,.25);
-      flex:0 0 auto; margin-top:2px;
+      width:18px; height:18px;
+      border-radius: 8px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      background: rgba(53,227,161,.12);
+      border:1px solid rgba(53,227,161,.25);
+      flex:0 0 auto;
+      margin-top:2px;
     }
-
-    /* FAQ */
     details{
       border-radius: var(--radius2);
       border:1px solid rgba(27,37,66,.7);
@@ -486,10 +462,13 @@
       box-shadow: var(--shadow2);
     }
     summary{ cursor:pointer; font-weight:700; outline:none; }
-    details p{ margin:10px 0 0; color:var(--muted); font-size: 13.7px; line-height:1.65; }
+    details p{
+      margin:10px 0 0;
+      color:var(--muted);
+      font-size: 13.7px;
+      line-height:1.65;
+    }
     .faq{ display:flex; flex-direction:column; gap:12px; }
-
-    /* Booking */
     .booking-shell{
       border-radius: 24px;
       border:1px solid rgba(27,37,66,.75);
@@ -500,84 +479,158 @@
     }
     .booking-shell:before{
       content:"";
-      position:absolute; inset:-2px;
+      position:absolute;
+      inset:-2px;
       background:
         radial-gradient(520px 340px at 30% 0%, rgba(47,107,255,.18), transparent 60%),
         radial-gradient(420px 260px at 85% 40%, rgba(53,227,161,.10), transparent 60%);
-      pointer-events:none; opacity:.9;
+      pointer-events:none;
+      opacity:.9;
     }
     .booking-head{
-      display:flex; align-items:center; justify-content:space-between;
-      gap:14px; padding:18px 18px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+      padding:18px 18px;
       border-bottom:1px solid rgba(27,37,66,.65);
-      background: rgba(7,10,18,.35); position:relative; z-index:2;
+      background: rgba(7,10,18,.35);
+      position:relative;
+      z-index:2;
     }
-    .steps{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; color:var(--muted); font-size:13px; }
+    .steps{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+      color:var(--muted);
+      font-size:13px;
+    }
     .step{
-      display:flex; align-items:center; gap:8px;
-      padding:7px 10px; border-radius: 999px;
-      border:1px solid rgba(27,37,66,.75); background: rgba(13,18,34,.22);
+      display:flex;
+      align-items:center;
+      gap:8px;
+      padding:7px 10px;
+      border-radius: 999px;
+      border:1px solid rgba(27,37,66,.75);
+      background: rgba(13,18,34,.22);
     }
-    .step.active{ border-color: rgba(47,107,255,.45); background: rgba(47,107,255,.10); color: rgba(242,245,255,.92); }
+    .step.active{
+      border-color: rgba(47,107,255,.45);
+      background: rgba(47,107,255,.10);
+      color: rgba(242,245,255,.92);
+    }
     .booking-body{
-      position:relative; z-index:2;
+      position:relative;
+      z-index:2;
       padding:18px 18px 18px;
-      display:grid; grid-template-columns: 1fr 1fr; gap:16px;
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:16px;
     }
-    .panel{ border-radius: 18px; border:1px solid rgba(27,37,66,.7); background: rgba(13,18,34,.22); padding:16px; }
+    .panel{
+      border-radius: 18px;
+      border:1px solid rgba(27,37,66,.7);
+      background: rgba(13,18,34,.22);
+      padding:16px;
+    }
     .panel h3{ margin:0 0 8px; font-size:16px; font-weight:800; }
     .panel p{ margin:0 0 12px; color:var(--muted); font-size:13.5px; line-height:1.6; }
-    .note{ color: var(--muted2); font-size:12.8px; line-height:1.6; margin-top:10px; }
-    .tz-select{
-      appearance:none; -webkit-appearance:none; -moz-appearance:none;
-      background: transparent; border:none; outline:none;
-      color: rgba(242,245,255,.92); font-size:12px; font-weight:600;
-      padding:0 18px 0 0; line-height:1.2; cursor:pointer;
+    .note{
+      color: var(--muted2);
+      font-size:12.8px;
+      line-height:1.6;
+      margin-top:10px;
     }
-    .tz-wrap{ position:relative; display:inline-flex; align-items:center; gap:8px; }
+    .tz-select{
+      appearance:none;
+      -webkit-appearance:none;
+      -moz-appearance:none;
+      background: transparent;
+      border:none;
+      outline:none;
+      color: rgba(242,245,255,.92);
+      font-size:12px;
+      font-weight:600;
+      padding:0 18px 0 0;
+      line-height:1.2;
+      cursor:pointer;
+    }
+    .tz-wrap{
+      position:relative;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+    }
     .tz-wrap:after{
-      content:"\u25BE"; position:absolute; right:0; top:50%; transform: translateY(-50%);
-      color: rgba(167,178,214,.95); font-size:12px; pointer-events:none; opacity:.9;
+      content:"\u25be";
+      position:absolute;
+      right:0;
+      top:50%;
+      transform: translateY(-50%);
+      color: rgba(167,178,214,.95);
+      font-size:12px;
+      pointer-events:none;
+      opacity:.9;
     }
     .cal-embed{
-      border-radius: 16px; border:1px solid rgba(27,37,66,.65);
-      background: rgba(7,10,18,.25); overflow:hidden; min-height: 620px;
+      border-radius: 16px;
+      border:1px solid rgba(27,37,66,.65);
+      background: rgba(7,10,18,.25);
+      overflow:hidden;
+      min-height: 620px;
     }
     .cal-embed > *{ width:100% !important; }
-
-    /* Footer */
     footer{
       border-top: 1px solid rgba(27,37,66,.65);
       background: rgba(7,10,18,.35);
       padding: 28px 0;
     }
     .footer-inner{
-      display:flex; justify-content:space-between; align-items:flex-start;
-      gap:18px; flex-wrap:wrap;
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:18px;
+      flex-wrap:wrap;
     }
     .footer-left{
-      display:flex; flex-direction:column; gap:8px;
-      color: var(--muted); font-size:13px; line-height:1.6; max-width: 62ch;
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      color: var(--muted);
+      font-size:13px;
+      line-height:1.6;
+      max-width: 62ch;
     }
     .footer-links{
-      display:flex; gap:10px; align-items:center; flex-wrap:wrap;
-      color: var(--muted); font-size:13px;
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+      color: var(--muted);
+      font-size:13px;
     }
     .footer-links a{
-      padding:8px 10px; border-radius: 12px;
+      padding:8px 10px;
+      border-radius: 12px;
       border:1px solid rgba(27,37,66,.75);
-      background: rgba(13,18,34,.22); transition:.18s ease;
+      background: rgba(13,18,34,.22);
+      transition:.18s ease;
     }
     .footer-links a:hover{
-      color: var(--text); border-color: rgba(47,107,255,.40); background: rgba(47,107,255,.10);
+      color: var(--text);
+      border-color: rgba(47,107,255,.40);
+      background: rgba(47,107,255,.10);
     }
-
-    /* Modal legal */
     .modal{
-      position:fixed; inset:0;
+      position:fixed;
+      inset:0;
       background: rgba(0,0,0,.62);
-      display:none; align-items:center; justify-content:center;
-      padding: 22px; z-index: 120;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding: 22px;
+      z-index: 120;
     }
     .modal.open{display:flex}
     .modal-card{
@@ -585,46 +638,46 @@
       border-radius: 22px;
       border:1px solid rgba(27,37,66,.85);
       background: linear-gradient(180deg, rgba(13,18,34,.92), rgba(11,16,32,.88));
-      box-shadow: var(--shadow); overflow:hidden; position:relative;
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      position:relative;
     }
     .modal-head{
-      padding:16px 16px; border-bottom: 1px solid rgba(27,37,66,.65);
-      display:flex; align-items:center; justify-content:space-between;
-      gap:12px; background: rgba(7,10,18,.45);
+      padding:16px 16px;
+      border-bottom: 1px solid rgba(27,37,66,.65);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      background: rgba(7,10,18,.45);
     }
     .modal-title{
       font-family: Sora, Inter, system-ui, sans-serif;
-      font-size: 16px; font-weight: 700; letter-spacing: -.2px;
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: -.2px;
     }
     .modal-body{
-      padding:16px 16px 18px; color: var(--muted);
-      font-size: 13.8px; line-height: 1.7;
-      max-height: 70vh; overflow:auto;
+      padding:16px 16px 18px;
+      color: var(--muted);
+      font-size: 13.8px;
+      line-height: 1.7;
+      max-height: 70vh;
+      overflow:auto;
     }
-    .modal-body h4{ color: var(--text); margin: 18px 0 8px; font-size: 14.5px; font-weight: 800; }
-    .modal-body h3{ color: var(--text); margin: 22px 0 8px; font-size: 16px; font-weight: 800; }
-    .modal-body ul{ padding-left: 0; list-style: none; display: flex; flex-direction: column; gap: 6px; margin: 10px 0; }
-    .modal-body ul li{ padding-left: 16px; position: relative; }
-    .modal-body ul li::before{ content: '•'; position: absolute; left: 0; color: var(--accent); }
-    .modal-body .warn-note{
-      background: rgba(255,204,102,.08); border: 1px solid rgba(255,204,102,.25);
-      border-left: 3px solid var(--warn); border-radius: 8px;
-      padding: 10px 14px; margin: 12px 0; font-size: 13px; color: var(--muted);
+    .modal-body h4{
+      color: var(--text);
+      margin: 18px 0 8px;
+      font-size: 14.5px;
+      font-weight: 800;
     }
-    .modal-body .info-table{ display: flex; flex-direction: column; gap: 0; margin: 12px 0; }
-    .modal-body .info-row{
-      display: flex; gap: 16px; padding: 9px 0;
-      border-bottom: 1px solid rgba(27,37,66,.5); font-size: 13.5px;
-    }
-    .modal-body .info-row:last-child{ border-bottom: none; }
-    .modal-body .info-label{ color: var(--muted2); min-width: 160px; font-size: 12.5px; }
-    .modal-body .info-val a{ color: var(--accent); text-decoration: underline; }
     .modal-body code{
-      background: rgba(47,107,255,.10); border:1px solid rgba(47,107,255,.20);
-      padding:2px 6px; border-radius: 10px; color: rgba(242,245,255,.92);
+      background: rgba(47,107,255,.10);
+      border:1px solid rgba(47,107,255,.20);
+      padding:2px 6px;
+      border-radius: 10px;
+      color: rgba(242,245,255,.92);
     }
-
-    /* Responsive */
     @media (max-width: 980px){
       .hero-grid{grid-template-columns: 1fr; gap:18px}
       .trust-grid{grid-template-columns:1fr}
@@ -637,23 +690,16 @@
       .brand{min-width:auto}
       .brand-logo{height:28px}
       .cal-embed{min-height: 720px;}
-      .nav{ top: 41px; }
-      .cookie-banner{ padding: 14px 16px; }
     }
-    @media (max-width: 600px){
-      .warning-bar{ font-size: 12px; padding: 9px 16px; }
-    }
-
     .anchor{scroll-margin-top: 96px;}
   </style>
 </head>
 <body>
   <div class="grain"></div>
 
-  <!-- WARNING BAR -->
-  <div class="warning-bar" role="alert" aria-live="polite">
-    <span class="wb-icon" aria-hidden="true">⚠️</span>
-    <span>Diese Website befindet sich noch in Bearbeitung &ndash; einige Daten könnten noch fehlen oder unvollständig sein.</span>
+  <!-- ⚠️ Gelber Hinweisstreifen -->
+  <div class="warning-stripe" role="alert">
+    ⚠️ Diese Website befindet sich noch im Aufbau — einige Inhalte sind möglicherweise noch unvollständig oder werden demnächst ergänzt.
   </div>
 
   <!-- Reusable inline logo SVG -->
@@ -667,11 +713,18 @@
       </defs>
       <text x="0" y="92"
             font-family="Sora, Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif"
-            font-weight="700" font-size="96" letter-spacing="2" fill="#FFFFFF">BLITZ</text>
+            font-weight="700"
+            font-size="96"
+            letter-spacing="2"
+            fill="#FFFFFF">BLITZ</text>
       <text x="340" y="92"
             font-family="Sora, Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif"
-            font-weight="700" font-size="96" letter-spacing="2" fill="url(#aiBlue)">AI</text>
-      <path d="M450 98 L415 138 L445 106 L430 106 L467 66 L450 98 Z" fill="url(#aiBlue)"/>
+            font-weight="700"
+            font-size="96"
+            letter-spacing="2"
+            fill="url(#aiBlue)">AI</text>
+      <path d="M450 98 L415 138 L445 106 L430 106 L467 66 L450 98 Z"
+            fill="url(#aiBlue)"/>
     </svg>
   </template>
 
@@ -720,15 +773,15 @@
         <div>
           <div class="kicker">
             <span class="dot"></span>
-            <span>Für Salons &amp; Studios, die mehr Termine aus Instagram holen wollen</span>
+            <span>F&#xFC;r Salons &amp; Studios, die mehr Termine aus Instagram holen wollen</span>
           </div>
-          <h1>Instagram-DMs, die buchen — auch wenn du gerade nicht am Handy bist.</h1>
+          <h1>Instagram-DMs, die buchen &#x2014; auch wenn du gerade nicht am Handy bist.</h1>
           <p class="subhead">
-            BlitzAI antwortet in Sekunden, erkennt die Absicht (Frage oder Termin), prüft live deinen Kalender und bucht, verschiebt oder storniert Termine automatisch 24/7, im Stil deines Unternehmens.
+            BlitzAI antwortet in Sekunden, erkennt die Absicht (Frage oder Termin), pr&#xFC;ft live deinen Kalender und bucht, verschiebt oder storniert Termine automatisch 24/7, im Stil deines Unternehmens.
           </p>
           <div class="hero-actions">
             <a class="btn primary" href="#booking" data-scroll>
-              <span class="icon" aria-hidden="true">📅</span> Kostenlose Demo buchen
+              <span class="icon" aria-hidden="true">&#x1F4C5;</span> Kostenlose Demo buchen
             </a>
             <a class="btn ghost" href="#ablauf" data-scroll>
               <span class="icon" aria-hidden="true">&#x25B6;</span> So funktioniert's
@@ -736,29 +789,29 @@
           </div>
           <div class="hero-points">
             <div class="point">
-              <div class="badge" aria-hidden="true">⏱️</div>
+              <div class="badge" aria-hidden="true">&#x23F1;&#xFE0F;</div>
               <div>
                 <strong>Antworten in Sekunden</strong>
                 <span>Jede Anfrage wird sofort aufgefangen.</span>
               </div>
             </div>
             <div class="point">
-              <div class="badge" aria-hidden="true">🗓️</div>
+              <div class="badge" aria-hidden="true">&#x1F5D3;&#xFE0F;</div>
               <div>
                 <strong>Termine automatisch managen</strong>
-                <span>Verfügbarkeit prüfen, passende Zeiten vorschlagen, buchen &amp; bestätigen — direkt in DM.</span>
+                <span>Verf&#xFC;gbarkeit pr&#xFC;fen, passende Zeiten vorschlagen, buchen &amp; best&#xE4;tigen &#x2014; direkt in DM.</span>
               </div>
             </div>
             <div class="point">
-              <div class="badge" aria-hidden="true">🧠</div>
+              <div class="badge" aria-hidden="true">&#x1F9E0;</div>
               <div>
                 <strong>Wie eine trainierte Rezeption</strong>
-                <span>Unser automatisierter KI-Agent ist auf Ihre Geschäftsprozesse trainiert und kennt alle relevanten Informationen, um Anfragen vollständig und zuverlässig zu beantworten..</span>
+                <span>Unser automatisierter KI-Agent ist auf Ihre Gesch&#xE4;ftsprozesse trainiert und kennt alle relevanten Informationen, um Anfragen vollst&#xE4;ndig und zuverl&#xE4;ssig zu beantworten..</span>
               </div>
             </div>
           </div>
           <p class="micro">
-            Wir übernehmen die komplette Technik und alle Prozesse im Hintergrund. Im Onboarding klären wir alle relevanten Punkte für Setup und KI Training, damit der Agent exakt zu deinem Business passt. Sobald er live ist, kannst du uns jederzeit schreiben und bei Bedarf ein Meeting vereinbaren, wenn du Abläufe verändern oder das Ergebnis weiter optimieren willst. Wir sind jederzeit erreichbar, helfen schnell weiter und setzen Anpassungen auf Wunsch rund um die Uhr um.
+            Wir &#xFC;bernehmen die komplette Technik und alle Prozesse im Hintergrund. Im Onboarding kl&#xE4;ren wir alle relevanten Punkte f&#xFC;r Setup und KI Training, damit der Agent exakt zu deinem Business passt. Sobald er live ist, kannst du uns jederzeit schreiben und bei Bedarf ein Meeting vereinbaren, wenn du Abl&#xE4;ufe ver&#xE4;ndern oder das Ergebnis weiter optimieren willst. Wir sind jederzeit erreichbar, helfen schnell weiter und setzen Anpassungen auf Wunsch rund um die Uhr um.
           </p>
           <div style="margin-top:18px; display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
             <div class="logo-slot logoMount"></div>
@@ -766,33 +819,31 @@
             <div class="logo-slot logoMount"></div>
           </div>
         </div>
-
         <aside class="mock" aria-label="DM Beispiel">
           <div class="mock-top">
             <div class="left">
               <div class="avatar" aria-hidden="true"></div>
               <div>
                 <div class="title">Instagram DMs</div>
-                <div class="meta">Beispiel: Kunde → BlitzAI</div>
+                <div class="meta">Beispiel: Kunde &#x2192; BlitzAI</div>
               </div>
             </div>
             <div class="pill">Live-Buchung</div>
           </div>
           <div class="mock-body">
-            <div class="bubble user">Hi! Kann ich morgen um 17:00 für Nägel kommen?</div>
+            <div class="bubble user">Hi! Kann ich morgen um 17:00 f&#xFC;r N&#xE4;gel kommen?</div>
             <div class="bubble ai">
-              Klar 😊 Welche Behandlung möchtest du genau?
-              <span class="small">Zur Auswahl stehen Auffüllen, Neuset oder Maniküre.</span>
+              Klar &#x1F60A; Welche Behandlung m&#xF6;chtest du genau?
+              <span class="small">Zur Auswahl stehen Auff&#xFC;llen, Neuset oder Manik&#xFC;re.</span>
             </div>
-            <div class="bubble user">Alles klar 😊 Dann Auffüllen!</div>
+            <div class="bubble user">Alles klar &#x1F60A; Dann Auff&#xFC;llen!</div>
             <div class="bubble ai">
-              Perfekt. Ich hab kurz nachgeschaut: um 17:00 ist leider nichts frei, aber ich hätte morgen noch 16:30 oder 17:15 verfügbar. Welche Zeit passt dir besser?
+              Perfekt. Ich hab kurz nachgeschaut: um 17:00 ist leider nichts frei, aber ich h&#xE4;tte morgen noch 16:30 oder 17:15 verf&#xFC;gbar. Welche Zeit passt dir besser?
               <span class="small"></span>
             </div>
           </div>
         </aside>
       </div>
-
       <div class="trust-grid" id="vorteile">
         <div class="trust">
           <h3>Mehr Buchungen aus den gleichen Anfragen</h3>
@@ -803,48 +854,59 @@
           <p>Keine vergessenen Nachrichten, keine Doppelbuchungen durch Hektik.</p>
         </div>
         <div class="trust">
-          <h3>Mehr Professionalität im Alltag</h3>
+          <h3>Mehr Professionalit&#xE4;t im Alltag</h3>
           <p>Der Ton ist freundlich, knapp und konsistent genau so, wie du es vorgegeben hast.</p>
         </div>
       </div>
       <div class="divider"></div>
     </div>
   </main>
+
   <!-- PROBLEM -->
   <section class="section compact anchor" id="funktion">
     <div class="wrap">
-      <h2 class="h2">Die meisten Studios verlieren Termine nicht wegen Qualität, sondern wegen Reaktionszeit.</h2>
+      <h2 class="h2">Die meisten Studios verlieren Termine nicht wegen Qualit&#xE4;t, sondern wegen Reaktionszeit.</h2>
       <p class="lead">
-        Menschen schreiben dann, wenn sie Zeit haben. Oft abends, früh morgens oder am Wochenende. Wenn in dem Moment niemand reagiert, wird einfach das nächste Studio angeschrieben.
+        Menschen schreiben dann, wenn sie Zeit haben. Oft abends, fr&#xFC;h morgens oder am Wochenende. Wenn in dem Moment niemand reagiert, wird einfach das n&#xE4;chste Studio angeschrieben.
       </p>
       <div class="grid-2">
         <div class="card">
-          <div class="tag">⚠️ After-Hours Buchungen</div>
-          <h3>Du bist offline — deine Kunden nicht.</h3>
-          <p>Ein großer Teil der Buchungen passiert außerhalb der Öffnungszeiten. Ohne "always-on" Buchung bist du für viele Interessenten schlicht nicht erreichbar.</p>
+          <div class="tag">&#x26A0;&#xFE0F; After-Hours Buchungen</div>
+          <h3>Du bist offline &#x2014; deine Kunden nicht.</h3>
+          <p>
+            Ein gro&#xDF;er Teil der Buchungen passiert au&#xDF;erhalb der &#xD6;ffnungszeiten. Ohne "always-on" Buchung bist du f&#xFC;r viele Interessenten schlicht nicht erreichbar.
+          </p>
           <div style="margin-top:14px;"></div>
         </div>
         <div class="card">
-          <div class="tag">⏳ Langsame DMs</div>
+          <div class="tag">&#x23F3; Langsame DMs</div>
           <h3>Wer in Minuten antwortet, gewinnt den Termin.</h3>
-          <p>Wenn jemand 2–3 Salons anschreibt, bucht er meistens dort, wo sofort Klarheit entsteht. Nicht, weil es "besser" ist, sondern weil es schneller ist.</p>
+          <p>
+            Wenn jemand 2&#x2013;3 Salons anschreibt, bucht er meistens dort, wo sofort Klarheit entsteht. Nicht, weil es "besser" ist, sondern weil es schneller ist.
+          </p>
           <div style="margin-top:14px;"></div>
         </div>
         <div class="card">
-          <div class="tag">🪑 No-Shows &amp; späte Absagen</div>
+          <div class="tag">&#x1FA91; No-Shows &amp; sp&#xE4;te Absagen</div>
           <h3>Leere Slots</h3>
-          <p>Jeder No-Show kostet Umsatz und blockiert wertvolle Zeit. Automatische Erinnerungen und unkomplizierte Umbuchungen per DM senken die Ausfallquote messbar.</p>
+          <p>
+            Jeder No-Show kostet Umsatz und blockiert wertvolle Zeit. Automatische Erinnerungen und unkomplizierte Umbuchungen per DM senken die Ausfallquote messbar.
+          </p>
           <div style="margin-top:14px;"></div>
         </div>
         <div class="card">
-          <div class="tag">📞 Telefon &amp; DM-Chaos</div>
-          <h3>Admin-Zeit skaliert nicht — Termine schon.</h3>
-          <p>Rückfragen, Kalender-Abgleich, Bestätigungen: Das ist nötig, aber kein Umsatztreiber. BlitzAI übernimmt den Ablauf, damit dein Team beim Service bleibt.</p>
+          <div class="tag">&#x1F4DE; Telefon &amp; DM-Chaos</div>
+          <h3>Admin-Zeit skaliert nicht &#x2014; Termine schon.</h3>
+          <p>
+            R&#xFC;ckfragen, Kalender-Abgleich, Best&#xE4;tigungen: Das ist n&#xF6;tig, aber kein Umsatztreiber. BlitzAI &#xFC;bernimmt den Ablauf, damit dein Team beim Service bleibt.
+          </p>
           <div style="margin-top:14px;"></div>
         </div>
       </div>
       <div style="margin-top:22px; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;">
-        <p class="note" style="margin:0">Quellenhinweise können im Footer verlinkt werden (z. B. Book Salon / SalonToday / HubSpot / Fresha).</p>
+        <p class="note" style="margin:0">
+          Quellenhinweise k&#xF6;nnen im Footer verlinkt werden (z. B. Book Salon / SalonToday / HubSpot / Fresha).
+        </p>
         <a class="btn primary" href="#booking" data-scroll>Jetzt Demo buchen</a>
       </div>
     </div>
@@ -855,25 +917,31 @@
     <div class="wrap">
       <div class="split">
         <div>
-          <h2 class="h2">BlitzAI ist dein KI-Mitarbeiter für die Rezeption – direkt in Instagram.</h2>
+          <h2 class="h2">BlitzAI ist dein KI-Mitarbeiter f&#xFC;r die Rezeption &#x2013; direkt in Instagram.</h2>
           <p class="lead">
-            BlitzAI reagiert sofort, fragt gezielt nach fehlenden Details und führt Interessenten sauber zum Termin. Kurz, freundlich, professionell - alles im stil von deinen business.
+            BlitzAI reagiert sofort, fragt gezielt nach fehlenden Details und f&#xFC;hrt Interessenten sauber zum Termin. Kurz, freundlich, professionell - alles im stil von deinen business.
           </p>
           <div class="stack">
             <div class="card">
-              <div class="tag">🧭 Intelligentes Routing</div>
+              <div class="tag">&#x1F9ED; Intelligentes Routing</div>
               <h3>Frage oder Buchung? BlitzAI erkennt es automatisch.</h3>
-              <p>Preise, Services, Dauer, Standort, Policies: Antworten kommen direkt. Wenn jemand buchen will, startet automatisch der Termin-Flow.</p>
+              <p>
+                Preise, Services, Dauer, Standort, Policies: Antworten kommen direkt. Wenn jemand buchen will, startet automatisch der Termin-Flow.
+              </p>
             </div>
             <div class="card">
-              <div class="tag">🗓️ Live-Verfügbarkeit</div>
-              <h3>Konkrete Zeiten statt endloser Rückfragen.</h3>
-              <p>BlitzAI prüft die Verfügbarkeit im Kalender, schlägt passende Slots vor und bucht nach Bestätigung. Umbuchen und Stornieren laufen genauso schnell und einfach.</p>
+              <div class="tag">&#x1F5D3;&#xFE0F; Live-Verf&#xFC;gbarkeit</div>
+              <h3>Konkrete Zeiten statt endloser R&#xFC;ckfragen.</h3>
+              <p>
+                BlitzAI pr&#xFC;ft die Verf&#xFC;gbarkeit im Kalender, schl&#xE4;gt passende Slots vor und bucht nach Best&#xE4;tigung. Umbuchen und Stornieren laufen genauso schnell und einfach.
+              </p>
             </div>
             <div class="card">
-              <div class="tag">🎯 Saubere Daten</div>
+              <div class="tag">&#x1F3AF; Saubere Daten</div>
               <h3>Wichtige Infos werden automatisch erfasst.</h3>
-              <p>Name, Service, Wunschzeit, Notizen — alles wird direkt ins Kalenderevent übernommen, damit du nichts nachfragen musst und die Infos nicht irgendwo zusammensuchen musst.</p>
+              <p>
+                Name, Service, Wunschzeit, Notizen &#x2014; alles wird direkt ins Kalenderevent &#xFC;bernommen, damit du nichts nachfragen musst und die Infos nicht irgendwo zusammensuchen musst.
+              </p>
             </div>
             <div style="display:flex; gap:12px; flex-wrap:wrap;">
               <a class="btn primary" href="#booking" data-scroll>Demo buchen</a>
@@ -883,29 +951,29 @@
         </div>
         <div>
           <div class="card" style="padding:20px;">
-            <div class="tag">⚡ Ablauf in 3 Schritten</div>
+            <div class="tag">&#x26A1; Ablauf in 3 Schritten</div>
             <h3>In wenigen Tagen live.</h3>
             <p>Kein kompliziertes Projekt. Klarer Prozess, sauber umgesetzt.</p>
             <div class="divider"></div>
             <div class="li">
-              <div class="check" aria-hidden="true">✓</div>
+              <div class="check" aria-hidden="true">&#x2713;</div>
               <div>
                 <strong>1) Verbinden</strong>
                 <div class="note" style="margin-top:4px;">Instagram + Kalender (z. B. Google Calendar) werden angebunden.</div>
               </div>
             </div>
             <div class="li">
-              <div class="check" aria-hidden="true">✓</div>
+              <div class="check" aria-hidden="true">&#x2713;</div>
               <div>
                 <strong>2) Einstellen</strong>
-                <div class="note" style="margin-top:4px;">Services, Preise, Dauer, Regeln, Ton — exakt so, wie du arbeitest.</div>
+                <div class="note" style="margin-top:4px;">Services, Preise, Dauer, Regeln, Ton &#x2014; exakt so, wie du arbeitest.</div>
               </div>
             </div>
             <div class="li">
-              <div class="check" aria-hidden="true">✓</div>
+              <div class="check" aria-hidden="true">&#x2713;</div>
               <div>
                 <strong>3) Aktivieren</strong>
-                <div class="note" style="margin-top:4px;">Ab jetzt laufen DMs, Terminbuchungen und Bestätigungen automatisch.</div>
+                <div class="note" style="margin-top:4px;">Ab jetzt laufen DMs, Terminbuchungen und Best&#xE4;tigungen automatisch.</div>
               </div>
             </div>
             <div style="margin-top:16px;">
@@ -921,23 +989,25 @@
   <!-- RESULTS -->
   <section class="section anchor" id="ergebnis">
     <div class="wrap">
-      <h2 class="h2">Was sich in der Praxis verändert</h2>
-      <p class="lead">BlitzAI ersetzt keine gute Arbeit. Es sorgt dafür, dass gute Arbeit auch gebucht wird. Du bekommst mehr Klarheit, weniger Stress und einen sauberen Ablauf.</p>
+      <h2 class="h2">Was sich in der Praxis ver&#xE4;ndert</h2>
+      <p class="lead">
+        BlitzAI ersetzt keine gute Arbeit. Es sorgt daf&#xFC;r, dass gute Arbeit auch gebucht wird. Du bekommst mehr Klarheit, weniger Stress und einen sauberen Ablauf.
+      </p>
       <div class="grid-3">
         <div class="card">
-          <div class="tag">📈 Mehr Buchungen</div>
+          <div class="tag">&#x1F4C8; Mehr Buchungen</div>
           <h3>Kein "Warten" mehr.</h3>
           <p>Interessenten bekommen sofort Antworten und konkrete Zeiten.</p>
           <div style="margin-top:14px;"></div>
         </div>
         <div class="card">
-          <div class="tag">🧘 Weniger Admin-Last</div>
+          <div class="tag">&#x1F9D8; Weniger Admin-Last</div>
           <h3>Inbox ruhig, Kalender sauber.</h3>
-          <p>Weniger Rückfragen, weniger manuelles Buchen, weniger Fehler unter Stress.</p>
+          <p>Weniger R&#xFC;ckfragen, weniger manuelles Buchen, weniger Fehler unter Stress.</p>
           <div style="margin-top:14px;"></div>
         </div>
         <div class="card">
-          <div class="tag">✅ Besserer Ablauf</div>
+          <div class="tag">&#x2705; Besserer Ablauf</div>
           <h3>Professionell, konsistent, freundlich.</h3>
           <p>Der Ton bleibt gleich, auch wenn du gerade voll im Service bist oder Feierabend hast.</p>
           <div style="margin-top:14px;"></div>
@@ -949,58 +1019,64 @@
       </div>
     </div>
   </section>
+
   <!-- PRICING -->
   <section class="section anchor" id="preise">
     <div class="wrap">
       <h2 class="h2">Preise</h2>
-      <p class="lead"></p>
+      <p class="lead">
+      </p>
       <div class="pricing">
         <div class="card">
-          <div class="tag">⚡ Einrichtung (einmalig)</div>
+          <div class="tag">&#x26A1; Einrichtung (einmalig)</div>
           <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-top:10px;">
             <div class="pill" style="border-color: rgba(255,204,102,.35); background: rgba(255,204,102,.10); color: rgba(242,245,255,.92);">
-              🔥 Aktion: -40% auf Einrichtung
+              &#x1F525; Aktion: -40% auf Einrichtung
             </div>
             <div class="pill" style="border-color: rgba(53,227,161,.30); background: rgba(53,227,161,.10); color: rgba(242,245,255,.92);">
-              Nur für kurze Zeit
+              Nur f&#xFC;r kurze Zeit
             </div>
           </div>
           <div class="price" style="display:flex; align-items:baseline; gap:12px; flex-wrap:wrap;">
             <span style="color: rgba(167,178,214,.85); text-decoration: line-through; text-decoration-thickness: 2px; text-decoration-color: rgba(255,255,255,.45); font-size: 18px; font-weight: 700;">
-              €399
+              &#x20AC;399
             </span>
             <span style="display:inline-flex; align-items:baseline; gap:10px;">
-              <span>€249</span>
+              <span>&#x20AC;249</span>
               <span class="pill" style="border-color: rgba(47,107,255,.45); background: rgba(47,107,255,.10); color: rgba(242,245,255,.92);">
-                Du sparst €150
+                Du sparst &#x20AC;150
               </span>
             </span>
           </div>
-          <p>Setup, Anbindung, Training, Tests und Go-Live. Wir stellen BlitzAI so ein, dass es zu deinem Ablauf passt.</p>
+          <p>
+            Setup, Anbindung, Training, Tests und Go-Live. Wir stellen BlitzAI so ein, dass es zu deinem Ablauf passt.
+          </p>
           <ul class="list">
-            <li class="li"><span class="check" aria-hidden="true">✓</span><span>Instagram DM-Flow + Ton &amp; Stil</span></li>
-            <li class="li"><span class="check" aria-hidden="true">✓</span><span>Services, Preise, Dauer, Regeln</span></li>
-            <li class="li"><span class="check" aria-hidden="true">✓</span><span>Kalender-Anbindung &amp; Slot-Logik</span></li>
-            <li class="li"><span class="check" aria-hidden="true">✓</span><span>Qualitäts-Check + Live-Schaltung</span></li>
+            <li class="li"><span class="check" aria-hidden="true">&#x2713;</span><span>Instagram DM-Flow + Ton &amp; Stil</span></li>
+            <li class="li"><span class="check" aria-hidden="true">&#x2713;</span><span>Services, Preise, Dauer, Regeln</span></li>
+            <li class="li"><span class="check" aria-hidden="true">&#x2713;</span><span>Kalender-Anbindung &amp; Slot-Logik</span></li>
+            <li class="li"><span class="check" aria-hidden="true">&#x2713;</span><span>Qualit&#xE4;ts-Check + Live-Schaltung</span></li>
           </ul>
           <div style="margin-top:16px;">
             <a class="btn full primary" href="#booking" data-scroll>Demo buchen</a>
-            <div class="note">Im Call klären wir, ob es für dein Studio passt.</div>
+            <div class="note">Im Call kl&#xE4;ren wir, ob es f&#xFC;r dein Studio passt.</div>
           </div>
         </div>
         <div class="card">
-          <div class="tag">🔁 Monatlich</div>
-          <div class="price">€69/mo <small>base bot · Nutzung, Wartung, Updates, Support</small></div>
-          <p>BlitzAI läuft kontinuierlich weiter, wird gepflegt und bei Bedarf angepasst (z. B. neue Services, neue Regeln).</p>
+          <div class="tag">&#x1F501; Monatlich</div>
+          <div class="price">&#x20AC;69/mo <small>base bot &#xB7; Nutzung, Wartung, Updates, Support</small></div>
+          <p>
+            BlitzAI l&#xE4;uft kontinuierlich weiter, wird gepflegt und bei Bedarf angepasst (z. B. neue Services, neue Regeln).
+          </p>
           <ul class="list">
-            <li class="li"><span class="check" aria-hidden="true">✓</span><span>Monitoring &amp; Support bei Fragen</span></li>
-            <li class="li"><span class="check" aria-hidden="true">✓</span><span>Updates &amp; Optimierungen</span></li>
-            <li class="li"><span class="check" aria-hidden="true">✓</span><span>Stabile Automations-Infrastruktur</span></li>
-            <li class="li"><span class="check" aria-hidden="true">✓</span><span>Optionale Reminder-Flows</span></li>
+            <li class="li"><span class="check" aria-hidden="true">&#x2713;</span><span>Monitoring &amp; Support bei Fragen</span></li>
+            <li class="li"><span class="check" aria-hidden="true">&#x2713;</span><span>Updates &amp; Optimierungen</span></li>
+            <li class="li"><span class="check" aria-hidden="true">&#x2713;</span><span>Stabile Automations-Infrastruktur</span></li>
+            <li class="li"><span class="check" aria-hidden="true">&#x2713;</span><span>Optionale Reminder-Flows</span></li>
           </ul>
           <div style="margin-top:16px;">
-            <a class="btn full ghost" href="#booking" data-scroll>Termin wählen</a>
-            <div class="note">Dauer: 15 Minuten · Online</div>
+            <a class="btn full ghost" href="#booking" data-scroll>Termin w&#xE4;hlen</a>
+            <div class="note">Dauer: 15 Minuten &#xB7; Online</div>
           </div>
         </div>
       </div>
@@ -1014,12 +1090,12 @@
       <p class="lead"></p>
       <div class="faq">
         <details>
-          <summary>Klingt das für Kunden wie ein Bot?</summary>
-          <p>Nein. Ton und Stil werden an dein Studio angepasst. BlitzAI schreibt kurz, freundlich und konkret — wie eine gute Rezeption.</p>
+          <summary>Klingt das f&#xFC;r Kunden wie ein Bot?</summary>
+          <p>Nein. Ton und Stil werden an dein Studio angepasst. BlitzAI schreibt kurz, freundlich und konkret &#x2014; wie eine gute Rezeption.</p>
         </details>
         <details>
           <summary>Kann ich steuern, welche Zeiten angeboten werden?</summary>
-          <p>Ja. Du legst Verfügbarkeit, Dauer, Pufferzeiten und Regeln fest. BlitzAI schlägt nur Slots vor, die wirklich passen.</p>
+          <p>Ja. Du legst Verf&#xFC;gbarkeit, Dauer, Pufferzeiten und Regeln fest. BlitzAI schl&#xE4;gt nur Slots vor, die wirklich passen.</p>
         </details>
         <details>
           <summary>Was passiert, wenn Kunden unklare Nachrichten schreiben?</summary>
@@ -1027,11 +1103,11 @@
         </details>
         <details>
           <summary>Funktioniert das bei mehreren Mitarbeitern?</summary>
-          <p>Ja, solange die Verfügbarkeit sauber im Kalender abgebildet ist (ein oder mehrere Kalender, je nach Setup).</p>
+          <p>Ja, solange die Verf&#xFC;gbarkeit sauber im Kalender abgebildet ist (ein oder mehrere Kalender, je nach Setup).</p>
         </details>
         <details>
           <summary>Wie schnell sind wir live?</summary>
-          <p>Das stimmen wir individuell mit jedem Business ab — normalerweise dauert das komplette Setup inkl. KI-Training auf euer Business etwa 10–14 Tage.</p>
+          <p>Das stimmen wir individuell mit jedem Business ab &#x2014; normalerweise dauert das komplette Setup inkl. KI-Training auf euer Business etwa 10&#x2013;14 Tage.</p>
         </details>
       </div>
       <div style="margin-top:18px; display:flex; gap:12px; flex-wrap:wrap; align-items:center; justify-content:space-between;">
@@ -1045,13 +1121,13 @@
   <section class="section anchor" id="booking">
     <div class="wrap">
       <h2 class="h2">Demo buchen</h2>
-      <p class="lead">Wähle einen Termin aus. Danach kurz deine Daten — fertig. Keine langen Formulare, kein Hin-und-Her.</p>
+      <p class="lead">W&#xE4;hle einen Termin aus. Danach kurz deine Daten &#x2014; fertig. Keine langen Formulare, kein Hin-und-Her.</p>
       <div class="booking-shell" role="region" aria-label="Buchung">
         <div class="booking-head">
           <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
             <div class="logo-slot header logoMount" title="BlitzAI"></div>
-            <div class="pill">Dauer: 30 Minuten · Online</div>
-            <div class="pill" title="Zeitzone auswählen">
+            <div class="pill">Dauer: 30 Minuten &#xB7; Online</div>
+            <div class="pill" title="Zeitzone ausw&#xE4;hlen">
               <span style="opacity:.95;">Zeitzone:</span>
               <span class="tz-wrap">
                 <select id="tzSelect" class="tz-select" aria-label="Zeitzone">
@@ -1074,42 +1150,42 @@
         </div>
         <div class="booking-body">
           <div class="panel" id="panelSlots">
-            <h3>1) Termin auswählen</h3>
-            <p>Wähle einen freien Slot im Kalender. Cal.com ist mit deinem Kalender synchronisiert (keine Doppelbuchungen).</p>
+            <h3>1) Termin ausw&#xE4;hlen</h3>
+            <p>W&#xE4;hle einen freien Slot im Kalender. Cal.com ist mit deinem Kalender synchronisiert (keine Doppelbuchungen).</p>
             <div class="divider"></div>
             <div id="calEmbed" class="cal-embed" aria-label="Cal.com Buchung"></div>
             <div class="note" id="calFallbackNote" style="margin-top:12px;">
-              Falls dein Browser Embeds blockt: <a class="btn small ghost" id="openCalBtn" href="https://cal.com/blitzai/30min" target="_blank" rel="noopener">In neuem Tab öffnen</a>
+              Falls dein Browser Embeds blockt: <a class="btn small ghost" id="openCalBtn" href="https://cal.com/blitzai/30min" target="_blank" rel="noopener">In neuem Tab &#xF6;ffnen</a>
             </div>
           </div>
           <div class="panel">
             <h3>Was du in 15 Minuten bekommst</h3>
-            <p>Ein klarer Blick, ob BlitzAI für dein Studio sofort Sinn macht.</p>
+            <p>Ein klarer Blick, ob BlitzAI f&#xFC;r dein Studio sofort Sinn macht.</p>
             <div class="divider"></div>
             <div class="li">
-              <div class="check" aria-hidden="true">✓</div>
+              <div class="check" aria-hidden="true">&#x2713;</div>
               <div>
                 <strong>Kurzer Check deines aktuellen Ablaufs</strong>
                 <div class="note" style="margin-top:4px;">Wo gehen DMs verloren, wo entsteht Pingpong, wo entstehen No-Shows?</div>
               </div>
             </div>
             <div class="li">
-              <div class="check" aria-hidden="true">✓</div>
+              <div class="check" aria-hidden="true">&#x2713;</div>
               <div>
                 <strong>Live-Demo am Beispiel-Flow</strong>
-                <div class="note" style="margin-top:4px;">Fragen beantworten, Slots vorschlagen, buchen, bestätigen.</div>
+                <div class="note" style="margin-top:4px;">Fragen beantworten, Slots vorschlagen, buchen, best&#xE4;tigen.</div>
               </div>
             </div>
             <div class="li">
-              <div class="check" aria-hidden="true">✓</div>
+              <div class="check" aria-hidden="true">&#x2713;</div>
               <div>
                 <strong>Konkrete Next Steps</strong>
                 <div class="note" style="margin-top:4px;">Wenn es passt: Setup-Plan. Wenn nicht: klare Empfehlung.</div>
               </div>
             </div>
             <div class="divider"></div>
-            <a class="btn full primary" href="#booking" data-scroll>Jetzt Slot wählen</a>
-            <div class="note">Kostenloser Demo-Call · Keine Verpflichtung</div>
+            <a class="btn full primary" href="#booking" data-scroll>Jetzt Slot w&#xE4;hlen</a>
+            <div class="note">Kostenloser Demo-Call &#xB7; Keine Verpflichtung</div>
           </div>
         </div>
       </div>
@@ -1120,10 +1196,10 @@
   <section class="section compact">
     <div class="wrap">
       <div class="card" style="padding:24px;">
-        <div class="tag">⚡ Abschluss</div>
+        <div class="tag">&#x26A1; Abschluss</div>
         <h2 class="h2" style="margin-top:6px;">Wenn du Instagram ernst nimmst, brauchst du schnelle Antworten.</h2>
         <p class="lead" style="margin-bottom:16px;">
-          BlitzAI sorgt dafür, dass Anfragen nicht liegen bleiben — und dass Buchungen nicht davon abhängen, ob gerade jemand Zeit hat.
+          BlitzAI sorgt daf&#xFC;r, dass Anfragen nicht liegen bleiben &#x2014; und dass Buchungen nicht davon abh&#xE4;ngen, ob gerade jemand Zeit hat.
         </p>
         <div style="display:flex; gap:12px; flex-wrap:wrap;">
           <a class="btn primary" href="#booking" data-scroll>Demo buchen</a>
@@ -1142,43 +1218,32 @@
             <div style="font-weight:800; color:var(--text); display:none;">BlitzAI</div>
           </div>
           <div>
-            &copy; <span id="year"></span> BlitzAI. Alle Rechte vorbehalten. <br/>
+            &#xA9; <span id="year"></span> BlitzAI. Alle Rechte vorbehalten. <br/>
             <span style="color:var(--muted2)"></span>
           </div>
           <div style="color:var(--muted2)">
-            Quellen (optional): Book Salon / SalonToday / HubSpot / Fresha / Convince &amp; Convert — Links können hier ergänzt werden.
+            Quellen (optional): Book Salon / SalonToday / HubSpot / Fresha / Convince &amp; Convert &#x2014; Links k&#xF6;nnen hier erg&#xE4;nzt werden.
           </div>
         </div>
         <div class="footer-links">
           <a href="#" data-legal="impressum">Impressum</a>
-          <a href="#" data-legal="datenschutz">Datenschutz</a>
-          <a href="#" data-legal="agb">AGB</a>
+          <a href="datenschutz.html">Datenschutz</a>
+          <a href="agb.html">AGB</a>
         </div>
       </div>
     </div>
   </footer>
-  <!-- Cookie Banner -->
-  <div class="cookie-banner" id="cookieBanner" role="dialog" aria-live="polite" aria-label="Cookie-Einwilligung">
-    <div class="cookie-text">
-      <h4>🍪 Diese Website verwendet Cookies</h4>
-      <p>Wir nutzen technisch notwendige Cookies für den sicheren Betrieb dieser Website. Derzeit verwenden wir keine Analyse- oder Marketing-Cookies. Weitere Infos in unserer <a href="#" data-legal="datenschutz">Datenschutzerklärung</a>.</p>
-    </div>
-    <div class="cookie-btns">
-      <button class="btn small ghost" type="button" onclick="closeCookieBanner(false)">Nur notwendige</button>
-      <button class="btn small primary" type="button" onclick="closeCookieBanner(true)">Verstanden &amp; Akzeptieren</button>
-    </div>
-  </div>
 
-  <!-- Modal -->
+  <!-- Modal (nur f&#xFC;r Impressum, da noch keine eigene Seite vorhanden) -->
   <div class="modal" id="legalModal" role="dialog" aria-modal="true" aria-label="Rechtliches">
     <div class="modal-card">
       <div class="modal-head">
         <div class="modal-title" id="legalTitle">Rechtliches</div>
-        <button class="btn small ghost" type="button" id="closeLegalBtn">Schließen</button>
+        <button class="btn small ghost" type="button" id="closeLegalBtn">Schlie&#xDF;en</button>
       </div>
       <div class="modal-body" id="legalBody">
         <h4>Platzhalter</h4>
-        <p>Inhalte werden geladen...</p>
+        <p>Hier kannst du sp&#xE4;ter deine Inhalte f&#xFC;r das Impressum einf&#xFC;gen.</p>
       </div>
     </div>
   </div>
@@ -1192,7 +1257,7 @@
       brandMount.insertBefore(logoWrap.firstElementChild, brandMount.firstElementChild);
     })();
 
-    // Inject all logo placeholders
+    // Inject all logo placeholders (hero + booking)
     document.querySelectorAll('.logoMount').forEach(el => {
       insertLogo(el, null, 'BlitzAI');
     });
@@ -1220,9 +1285,7 @@
       });
     });
 
-    // ========================
-    // Legal modal content
-    // ========================
+    // Legal modal (Impressum only)
     const legalModal = document.getElementById("legalModal");
     const legalTitle = document.getElementById("legalTitle");
     const legalBody  = document.getElementById("legalBody");
@@ -1231,131 +1294,19 @@
     const legalContent = {
       impressum: {
         title: "Impressum",
-        body: `<h4>Platzhalter — Impressum</h4><p>Füge hier deine vollständigen Impressumsangaben ein.</p>`
-      },
-      datenschutz: {
-        title: "Datenschutzerklärung",
-        body: `<p style="color:var(--muted2); font-size:12px; margin-bottom:18px;">Stand: 26.03.2026</p>
-<h3>1. Verantwortlicher</h3>
-<div class="info-table">
-  <div class="info-row"><span class="info-label">Name</span><span class="info-val">BlitzAI GbR</span></div>
-  <div class="info-row"><span class="info-label">Anschrift</span><span class="info-val">[STRASSE, PLZ ORT], Deutschland</span></div>
-  <div class="info-row"><span class="info-label">E-Mail (allgemein)</span><span class="info-val"><a href="mailto:hello@blitzai.tech">hello@blitzai.tech</a></span></div>
-  <div class="info-row"><span class="info-label">E-Mail (Datenschutz)</span><span class="info-val"><a href="mailto:privacy@blitzai.tech">privacy@blitzai.tech</a></span></div>
-</div>
-<h3>2. Zwecke und Rechtsgrundlagen</h3>
-<p>Wir verarbeiten personenbezogene Daten nur, soweit dies für den Betrieb unserer Website, die Bearbeitung von Anfragen oder die Durchführung vorvertraglicher Maßnahmen erforderlich ist. Maßgebliche Rechtsgrundlagen sind:</p>
-<ul>
-  <li>Art. 6 Abs. 1 lit. f DSGVO – Berechtigtes Interesse (z. B. sicherer Website-Betrieb, Fehleranalyse)</li>
-  <li>Art. 6 Abs. 1 lit. b DSGVO – Vorvertragliche/vertragliche Maßnahmen (z. B. Terminbuchung, Angebotsanfrage)</li>
-  <li>Art. 6 Abs. 1 lit. a DSGVO – Einwilligung (z. B. nicht notwendige Cookies, sofern künftig eingesetzt)</li>
-</ul>
-<h3>3. Zugriffsdaten / Server-Logfiles</h3>
-<p>Beim Aufruf unserer Website erfasst der Hosting-Anbieter automatisch technische Zugriffsdaten in sogenannten Server-Logfiles. Diese umfassen insbesondere:</p>
-<ul>
-  <li>IP-Adresse des anfragenden Geräts</li>
-  <li>Datum und Uhrzeit des Abrufs</li>
-  <li>Aufgerufene Seite oder Datei</li>
-  <li>Browsertyp/-version und Betriebssystem</li>
-  <li>Referrer-URL (vorherige Seite)</li>
-</ul>
-<p>Zweck: Gewährleistung von Stabilität und Sicherheit des Betriebs sowie Abwehr von Angriffen.</p>
-<p>Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO.</p>
-<div class="warn-note">⚠ Speicherdauer: [z. B. 7, 14 oder 30 Tage] — bitte mit Hosting-Anbieter abstimmen und hier einsetzen.</div>
-<h3>4. Kontaktaufnahme per E-Mail</h3>
-<p>Kontaktieren Sie uns per E-Mail, verarbeiten wir die von Ihnen übermittelten Daten (Name, E-Mail-Adresse, Nachrichteninhalt) ausschließlich zur Bearbeitung Ihrer Anfrage.</p>
-<p>Zweck: Kommunikation, Anfragenbearbeitung, Angebotsunterbreitung.</p>
-<p>Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO (vorvertraglich) bzw. Art. 6 Abs. 1 lit. f DSGVO.</p>
-<p>Speicherdauer: Bis zum abschließenden Abschluss der Anfrage; danach nach Maßgabe gesetzlicher Aufbewahrungspflichten (Handels-/Steuerrecht) oder interner Löschfristen.</p>
-<h3>5. Terminbuchung über Cal.com</h3>
-<p>Wir bieten die Möglichkeit, Termine über den externen Dienst Cal.com zu buchen. Dabei werden – je nach Konfiguration – insbesondere folgende Daten verarbeitet:</p>
-<ul>
-  <li>Name und E-Mail-Adresse</li>
-  <li>Gewünschter Termin / Zeitslot</li>
-  <li>Optionale Notizen / Anliegen</li>
-  <li>Technische Metadaten (z. B. Buchungszeitpunkt; IP-Adresse kann technisch anfallen)</li>
-</ul>
-<p>Zweck: Terminorganisation, Durchführung vorvertraglicher Kommunikation.</p>
-<p>Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO.</p>
-<p>Empfänger: Cal.com, Inc. (als externer Dienstleister / ggf. Auftragsverarbeiter).</p>
-<p>Datenübermittlung in Drittländer: Je nach Konfiguration des Anbieters kann eine Verarbeitung außerhalb der EU/des EWR erfolgen. Sofern erforderlich, wird die Übermittlung über geeignete Garantien (insb. EU-Standardvertragsklauseln) abgesichert. Weitere Informationen entnehmen Sie bitte der Datenschutzerklärung von Cal.com.</p>
-<div class="warn-note">⚠ Link zur Cal.com-Datenschutzerklärung im Footer/Datenschutzbereich ergänzen.</div>
-<h3>6. Cookies</h3>
-<p>Unsere Website kann technisch notwendige Cookies einsetzen (z. B. für Session-Sicherheit oder grundlegende Funktionen des Buchungstools). Eine Einwilligung ist hierfür nicht erforderlich.</p>
-<p>Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse).</p>
-<p>Tracking / Marketing: Wir verwenden derzeit keine Analyse- oder Marketing-Cookies (kein Google Analytics, kein Meta Pixel). Sollte sich dies ändern, werden wir Sie vorab informieren und ggf. Ihre Einwilligung einholen.</p>
-<h3>7. Externe Dienstleister und Empfänger</h3>
-<p>Für den Betrieb der Website und der Buchungsfunktion setzen wir externe Dienstleister ein (z. B. Hosting, Cal.com). Diese sind, soweit sie personenbezogene Daten in unserem Auftrag verarbeiten, vertraglich zur Einhaltung der DSGVO verpflichtet.</p>
-<h3>8. Ihre Rechte als betroffene Person</h3>
-<p>Gegenüber uns stehen Ihnen folgende Rechte zu:</p>
-<ul>
-  <li>Auskunft über gespeicherte Daten (Art. 15 DSGVO)</li>
-  <li>Berichtigung unrichtiger Daten (Art. 16 DSGVO)</li>
-  <li>Löschung / „Recht auf Vergessenwerden" (Art. 17 DSGVO)</li>
-  <li>Einschränkung der Verarbeitung (Art. 18 DSGVO)</li>
-  <li>Datenübertragbarkeit (Art. 20 DSGVO)</li>
-  <li>Widerspruch gegen Verarbeitungen auf Basis berechtigter Interessen (Art. 21 DSGVO)</li>
-</ul>
-<h3>9. Datenschutzkontakt</h3>
-<p>Für alle Datenschutzanfragen erreichen Sie uns unter:</p>
-<p>E-Mail: <a href="mailto:privacy@blitzai.tech">privacy@blitzai.tech</a></p>
-<h3>[Optional] Kontaktformular</h3>
-<p>Sofern auf unserer Website ein Kontaktformular verfügbar ist, verarbeiten wir die dort eingegebenen Daten (Name, E-Mail-Adresse, Nachricht) ausschließlich zur Bearbeitung Ihrer Anfrage.</p>
-<p>Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO (vorvertraglich) bzw. Art. 6 Abs. 1 lit. f DSGVO.</p>
-<p>Speicherdauer: wie unter Ziffer 4 beschrieben.</p>
-<p>Dieser Abschnitt ist nur aktiv, wenn ein Kontaktformular eingebunden ist.</p>`
-      },
-      agb: {
-        title: "Allgemeine Geschäftsbedingungen (B2B)",
-        body: `<p style="color:var(--muted2); font-size:12px; margin-bottom:18px;">Stand: 26.03.2026</p>
-<h3>§ 1 — Geltungsbereich und B2B-Beschränkung</h3>
-<p>Diese Allgemeinen Geschäftsbedingungen (AGB) gelten für alle Leistungen der BlitzAI GbR gegenüber ihren Kunden.</p>
-<p>Unser Angebot richtet sich ausschließlich an Unternehmer im Sinne von § 14 BGB. Verbraucher im Sinne von § 13 BGB sind nicht Zielgruppe dieser Website oder der angebotenen Leistungen. Ein Vertragsschluss mit Verbrauchern ist ausgeschlossen.</p>
-<p>Entgegenstehende oder abweichende AGB des Kunden gelten nur, wenn BlitzAI diesen ausdrücklich schriftlich zugestimmt hat.</p>
-<h3>§ 2 — Leistungsgegenstand</h3>
-<p>BlitzAI erbringt Dienstleistungen zur Konzeption, Einrichtung, Konfiguration, Wartung und Optimierung KI-gestützter Automatisierungslösungen, insbesondere:</p>
-<ul>
-  <li>Verarbeitung und Routing von Kundenanfragen über Instagram Direct Messages (Intent-Erkennung)</li>
-  <li>Automatisierte FAQ-Antworten und Kommunikationsworkflows</li>
-  <li>Terminlogik und Buchungsintegration (z. B. via Cal.com / Google Calendar)</li>
-  <li>Prozess-Routing und individuelle Automatisierungsszenarien</li>
-</ul>
-<p>Der konkrete Leistungsumfang ergibt sich aus dem jeweiligen Angebot oder der Leistungsbeschreibung.</p>
-<h3>§ 3 — Mitwirkungspflichten des Kunden</h3>
-<p>Der Kunde stellt BlitzAI sämtliche für die Leistungserbringung erforderlichen Inhalte, Informationen und Zugangsdaten vollständig und korrekt zur Verfügung (z. B. Preislisten, Services, Öffnungszeiten, Policies, Buchungsregeln, Kalenderverfügbarkeiten). Änderungen sind BlitzAI unverzüglich mitzuteilen.</p>
-<p>Unzureichende oder unrichtige Angaben können die Leistungsqualität beeinträchtigen; eine Haftung von BlitzAI in diesem Fall ist ausgeschlossen.</p>
-<h3>§ 4 — Vergütung und Zahlungsbedingungen</h3>
-<p>Vergütung, Fälligkeit und Zahlungsmodalitäten ergeben sich aus dem individuellen Angebot oder Vertrag.</p>
-<div class="warn-note">⚠ Zahlungsziel: [z. B. 7 oder 14 Tage] netto ab Rechnungsdatum einsetzen.</div>
-<p>Bei Zahlungsverzug ist BlitzAI berechtigt, Verzugszinsen in gesetzlicher Höhe (§ 288 BGB) zu berechnen.</p>
-<h3>§ 5 — Laufzeit und Kündigung</h3>
-<p>Laufzeit und Kündigungsfristen ergeben sich aus dem jeweiligen Angebot oder Vertrag. Soweit dort keine Regelung getroffen wird, gilt eine Mindestlaufzeit von einem Monat mit einer Kündigungsfrist von 14 Tagen zum Monatsende.</p>
-<h3>§ 6 — Haftung / Keine Erfolgsgarantie</h3>
-<p>(1) BlitzAI haftet bei Vorsatz und grober Fahrlässigkeit unbeschränkt.</p>
-<p>(2) Bei einfacher Fahrlässigkeit haftet BlitzAI nur bei Verletzung wesentlicher Vertragspflichten (Kardinalpflichten) und beschränkt auf den typischerweise vorhersehbaren, vertragstypischen Schaden.</p>
-<p>(3) Eine Haftung für entgangenen Gewinn, mittelbare Schäden oder Folgeschäden ist ausgeschlossen, soweit gesetzlich zulässig.</p>
-<p>(4) Keine Erfolgsgarantie: BlitzAI schuldet keinem bestimmten Umsatz, Leads oder sonstigen Ergebnisse. Ergebnisse sind von Faktoren abhängig, die außerhalb des Einflussbereichs von BlitzAI liegen (z. B. Angebot und Nachfrage, Plattform-Restriktionen, Inhalte und Qualität der Kundendaten).</p>
-<h3>§ 7 — Drittanbieter und Plattformabhängigkeit</h3>
-<p>Soweit Leistungen von Drittplattformen abhängen (insb. Meta/Instagram, Cal.com, Google, ManyChat, Make.com, OpenAI), übernimmt BlitzAI keine Haftung für deren Verfügbarkeit, Änderungen der Plattformbedingungen oder sonstige Umstände, die außerhalb des Einflussbereichs von BlitzAI liegen.</p>
-<h3>§ 8 — Datenschutz und Auftragsverarbeitung</h3>
-<p>Soweit BlitzAI im Rahmen der Leistungserbringung personenbezogene Daten im Auftrag des Kunden verarbeitet, wird bei Vertragsschluss ein Auftragsverarbeitungsvertrag (AVV) gemäß Art. 28 DSGVO bereitgestellt und unterzeichnet. Weiteres ergibt sich aus dem AVV.</p>
-<h3>§ 9 — Vertraulichkeit</h3>
-<p>Beide Vertragsparteien verpflichten sich, Geschäfts- und Betriebsgeheimnisse der jeweils anderen Partei vertraulich zu behandeln und nicht an Dritte weiterzugeben. Diese Verpflichtung gilt auch nach Beendigung des Vertragsverhältnisses fort.</p>`
+        body: '<h4>Platzhalter &#x2014; Impressum</h4><p>F&#xFC;ge hier deine vollst&#xE4;ndigen Impressumsangaben ein.</p>'
       }
     };
-
-    function openLegal(key) {
-      const item = legalContent[key];
-      if (!item) return;
-      legalTitle.textContent = item.title;
-      legalBody.innerHTML = item.body;
-      legalModal.classList.add('open');
-    }
 
     document.querySelectorAll('[data-legal]').forEach(link => {
       link.addEventListener('click', (e) => {
         e.preventDefault();
-        openLegal(link.getAttribute('data-legal'));
+        const key = link.getAttribute('data-legal');
+        const item = legalContent[key];
+        if (!item) return;
+        legalTitle.textContent = item.title;
+        legalBody.innerHTML = item.body;
+        legalModal.classList.add('open');
       });
     });
 
@@ -1364,40 +1315,18 @@
     legalModal.addEventListener('click', (e) => { if (e.target === legalModal) closeLegal(); });
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLegal(); });
 
-    // =========================
-    // Cookie Banner
-    // =========================
-    function closeCookieBanner(accepted) {
-      document.getElementById('cookieBanner').classList.remove('show');
-      setTimeout(() => { document.getElementById('cookieBanner').style.display = 'none'; }, 400);
-      localStorage.setItem('cookieConsent', accepted ? 'accepted' : 'declined');
-    }
-
-    // Re-bind cookie banner datenschutz link after it's in DOM
-    document.querySelector('#cookieBanner [data-legal="datenschutz"]').addEventListener('click', (e) => {
-      e.preventDefault();
-      openLegal('datenschutz');
-    });
-
-    window.addEventListener('load', function() {
-      if (!localStorage.getItem('cookieConsent')) {
-        setTimeout(function() {
-          document.getElementById('cookieBanner').classList.add('show');
-        }, 900);
-      }
-    });
-
-    // =========================
     // Cal.com embed
-    // =========================
     const CAL_PUBLIC_LINK = "blitzai/30min";
     const openCalBtn = document.getElementById("openCalBtn");
     const tzSelect = document.getElementById("tzSelect");
     const calEmbedEl = document.getElementById("calEmbed");
 
     function detectTZ(){
-      try{ return Intl.DateTimeFormat().resolvedOptions().timeZone || "Europe/Berlin"; }
-      catch(e){ return "Europe/Berlin"; }
+      try{
+        return Intl.DateTimeFormat().resolvedOptions().timeZone || "Europe/Berlin";
+      }catch(e){
+        return "Europe/Berlin";
+      }
     }
 
     function buildCalLink(tz){
@@ -1461,5 +1390,6 @@
       });
     })();
   </script>
+
 </body>
 </html>
