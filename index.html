@@ -102,6 +102,9 @@
       display:block;
       filter: drop-shadow(0 10px 30px rgba(0,0,0,.35));
     }
+    /* Hamburger hidden on desktop */
+    .hamburger{ display:none; }
+
     .brand-name{
       font-family: Sora, Inter, system-ui, sans-serif;
       letter-spacing:.2px;
@@ -678,6 +681,7 @@
       border-radius: 10px;
       color: rgba(242,245,255,.92);
     }
+    /* ===== TABLET (max 980px) ===== */
     @media (max-width: 980px){
       .hero-grid{grid-template-columns: 1fr; gap:18px}
       .trust-grid{grid-template-columns:1fr}
@@ -690,6 +694,131 @@
       .brand{min-width:auto}
       .brand-logo{height:28px}
       .cal-embed{min-height: 720px;}
+    }
+    /* ===== MOBILE (max 640px) ===== */
+    @media (max-width: 640px){
+      /* Typography */
+      h1{ font-size: clamp(28px, 8vw, 40px); letter-spacing: -0.5px; }
+      .h2{ font-size: clamp(22px, 6vw, 32px); }
+      .subhead{ font-size: 15px; }
+      .lead{ font-size: 15px; line-height:1.65; }
+      /* Layout */
+      .section{ padding: 52px 0; }
+      .section.compact{ padding: 40px 0; }
+      .wrap{ padding: 0 16px; }
+      /* Navbar - hamburger menu */
+      .nav-links{ display: none; }
+      .nav-links.open{
+        display: flex;
+        flex-direction: column;
+        position: fixed;
+        top: 0; left: 0; right: 0;
+        background: rgba(7,10,18,.97);
+        border-bottom: 1px solid rgba(27,37,66,.8);
+        padding: 72px 20px 24px;
+        gap: 4px;
+        z-index: 200;
+        backdrop-filter: blur(18px);
+      }
+      .nav-links.open a{
+        padding: 14px 16px;
+        border-radius: 12px;
+        border: 1px solid rgba(27,37,66,.5);
+        background: rgba(13,18,34,.4);
+        color: var(--text);
+        font-size: 16px;
+        font-weight: 600;
+      }
+      .nav-inner{ gap: 10px; }
+      .nav-cta{ gap: 8px; }
+      .nav-cta .btn.ghost{ display: none; }
+      .btn.small{ padding: 9px 12px; font-size: 13px; }
+      /* Hamburger button */
+      .hamburger{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 5px;
+        cursor: pointer;
+        padding: 6px;
+        border-radius: 10px;
+        border: 1px solid rgba(27,37,66,.7);
+        background: rgba(13,18,34,.4);
+        order: -1;
+        flex-shrink: 0;
+      }
+      .hamburger span{
+        width: 20px; height: 2px;
+        background: var(--text);
+        border-radius: 2px;
+        display: block;
+        transition: .22s ease;
+      }
+      .hamburger.active span:nth-child(1){ transform: translateY(7px) rotate(45deg); }
+      .hamburger.active span:nth-child(2){ opacity: 0; }
+      .hamburger.active span:nth-child(3){ transform: translateY(-7px) rotate(-45deg); }
+      /* Hero */
+      .hero{ padding: 48px 0 0; }
+      .hero-grid{ gap: 28px; }
+      .kicker{ font-size: 12px; padding: 7px 10px; }
+      .hero-actions{ gap: 10px; }
+      .hero-actions .btn{ padding: 12px 16px; font-size: 14px; }
+      /* Hero logo row - hide the repeated logo slots (keep only 1) */
+      .logo-row .logo-slot:not(:first-child){ display: none; }
+      .logo-row{ gap: 0; }
+      /* Cards */
+      .card{ padding: 16px; }
+      .card h3{ font-size: 15px; }
+      .card p{ font-size: 13.5px; }
+      /* Points */
+      .hero-points{ gap: 10px; }
+      .point{ padding: 12px; }
+      /* Trust grid */
+      .trust-grid{ gap: 10px; }
+      .trust{ padding: 14px; }
+      .trust h3{ font-size: 14px; }
+      /* Mock chat */
+      .mock{ border-radius: 18px; }
+      .bubble{ font-size: 13px; max-width: 96%; }
+      /* Booking section */
+      .booking-shell{ border-radius: 18px; }
+      .booking-head{ padding: 14px; flex-wrap: wrap; gap: 10px; }
+      .booking-body{ padding: 14px; }
+      .panel{ padding: 14px; }
+      .steps{ gap: 8px; flex-wrap: wrap; }
+      .step{ font-size: 12px; padding: 6px 9px; }
+      .cal-embed{ min-height: 680px; }
+      /* Pricing */
+      .pricing{ gap: 14px; }
+      .price{ font-size: 28px; }
+      /* Footer */
+      .footer-inner{ flex-direction: column; gap: 16px; }
+      .footer-links{ flex-wrap: wrap; gap: 8px; }
+      /* Warning banner */
+      .warning-stripe{ font-size: 12px; padding: 9px 16px; }
+      /* Logo slots in hero - show only one */
+      div[style*="display:flex"][style*="gap:12px"][style*="align-items:center"][style*="flex-wrap:wrap"] .logo-slot:nth-child(2),
+      div[style*="display:flex"][style*="gap:12px"][style*="align-items:center"][style*="flex-wrap:wrap"] .logo-slot:nth-child(3){ display: none; }
+      /* Booking steps */
+      .booking-head > div:first-child{ flex-direction: column; align-items: flex-start; }
+      /* Section spacing fixes */
+      .micro{ font-size: 13px; }
+      .note{ font-size: 12px; }
+      /* Split section */
+      .stack{ gap: 12px; }
+      /* Grid improvements */
+      .grid-2{ gap: 12px; }
+      .grid-3{ gap: 12px; }
+      .grid-2 .card, .grid-3 .card{ padding: 14px; }
+      /* FAQ */
+      .faq{ gap: 10px; }
+      details{ padding: 12px; }
+      summary{ font-size: 14.5px; }
+      details p{ font-size: 13.5px; }
+      /* CTA section at end */
+      .section.compact .card{ padding: 18px; }
+      /* Prevent overflow */
+      .trust-grid, .grid-2, .grid-3{ overflow: hidden; }
     }
     .anchor{scroll-margin-top: 96px;}
   </style>
@@ -742,19 +871,22 @@
   <header class="nav">
     <div class="wrap">
       <div class="nav-inner">
+        <button class="hamburger" id="hamburgerBtn" aria-label="Men&#xFC; &#xF6;ffnen" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
         <div class="brand" id="brandMount">
           <div>
             <div class="brand-name" style="display:none;">BlitzAI</div>
             <div class="brand-sub">DMs, die Termine buchen.</div>
           </div>
         </div>
-        <nav class="nav-links" aria-label="Navigation">
-          <a href="#vorteile">Vorteile</a>
-          <a href="#funktion">Funktionen</a>
-          <a href="#ablauf">Ablauf</a>
-          <a href="#ergebnis">Ergebnisse</a>
-          <a href="#preise">Preise</a>
-          <a href="#faq">FAQ</a>
+        <nav class="nav-links" id="navLinks" aria-label="Navigation">
+          <a href="#vorteile" data-scroll>Vorteile</a>
+          <a href="#funktion" data-scroll>Funktionen</a>
+          <a href="#ablauf" data-scroll>Ablauf</a>
+          <a href="#ergebnis" data-scroll>Ergebnisse</a>
+          <a href="#preise" data-scroll>Preise</a>
+          <a href="#faq" data-scroll>FAQ</a>
         </nav>
         <div class="nav-cta">
           <a class="btn small ghost" href="#booking" data-scroll>Termin buchen</a>
@@ -813,7 +945,7 @@
           <p class="micro">
             Wir &#xFC;bernehmen die komplette Technik und alle Prozesse im Hintergrund. Im Onboarding kl&#xE4;ren wir alle relevanten Punkte f&#xFC;r Setup und KI Training, damit der Agent exakt zu deinem Business passt. Sobald er live ist, kannst du uns jederzeit schreiben und bei Bedarf ein Meeting vereinbaren, wenn du Abl&#xE4;ufe ver&#xE4;ndern oder das Ergebnis weiter optimieren willst. Wir sind jederzeit erreichbar, helfen schnell weiter und setzen Anpassungen auf Wunsch rund um die Uhr um.
           </p>
-          <div style="margin-top:18px; display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
+          <div class="logo-row" style="margin-top:18px; display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
             <div class="logo-slot logoMount"></div>
             <div class="logo-slot logoMount"></div>
             <div class="logo-slot logoMount"></div>
@@ -1272,6 +1404,36 @@
 
     // Year
     document.getElementById("year").textContent = new Date().getFullYear();
+
+    // Hamburger menu
+    const hamburgerBtn = document.getElementById('hamburgerBtn');
+    const navLinks = document.getElementById('navLinks');
+    if (hamburgerBtn && navLinks) {
+      hamburgerBtn.addEventListener('click', () => {
+        const isOpen = navLinks.classList.toggle('open');
+        hamburgerBtn.classList.toggle('active', isOpen);
+        hamburgerBtn.setAttribute('aria-expanded', isOpen);
+        document.body.style.overflow = isOpen ? 'hidden' : '';
+      });
+      // Close on nav link click
+      navLinks.querySelectorAll('a').forEach(a => {
+        a.addEventListener('click', () => {
+          navLinks.classList.remove('open');
+          hamburgerBtn.classList.remove('active');
+          hamburgerBtn.setAttribute('aria-expanded', 'false');
+          document.body.style.overflow = '';
+        });
+      });
+      // Close on outside click
+      document.addEventListener('click', (e) => {
+        if (!hamburgerBtn.contains(e.target) && !navLinks.contains(e.target)) {
+          navLinks.classList.remove('open');
+          hamburgerBtn.classList.remove('active');
+          hamburgerBtn.setAttribute('aria-expanded', 'false');
+          document.body.style.overflow = '';
+        }
+      });
+    }
 
     // Smooth scroll
     document.querySelectorAll('[data-scroll]').forEach(a => {
