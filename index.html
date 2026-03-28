@@ -1553,5 +1553,31 @@
     })();
   </script>
 
+
+  <!-- Cookie Consent Banner -->
+  <div id="cookieBanner" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:9999;padding:0 16px 16px;pointer-events:none;">
+    <div style="max-width:900px;margin:0 auto;background:rgba(13,18,34,0.97);border:1px solid rgba(47,107,255,0.35);border-radius:18px;padding:20px 24px;box-shadow:0 10px 40px rgba(0,0,0,0.6),0 0 0 1px rgba(255,255,255,0.04) inset;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);display:flex;flex-wrap:wrap;align-items:center;gap:14px;pointer-events:all;">
+      <div style="flex:1;min-width:200px;">
+        <p style="margin:0;font-family:Inter,system-ui,sans-serif;font-size:14px;color:#a7b2d6;line-height:1.6;">
+          <strong style="color:#f2f5ff;">&#x1F36A; Wir verwenden Cookies.</strong>
+          Diese Website nutzt Cookies, um das Nutzererlebnis zu verbessern und anonymisierte Nutzungsdaten zu analysieren. Mehr dazu in unserer
+          <a href="datenschutz.html" style="color:#2f6bff;text-decoration:none;font-weight:500;">Datenschutzerklaerung</a>.
+        </p>
+      </div>
+      <div style="display:flex;gap:10px;flex-shrink:0;flex-wrap:wrap;">
+        <button id="cookieDecline" onclick="(function(){localStorage.setItem('blitzai_cc','no');document.getElementById('cookieBanner').style.display='none';})()" style="font-family:Inter,system-ui,sans-serif;font-size:13px;font-weight:500;padding:9px 18px;border-radius:12px;border:1px solid rgba(167,178,214,0.25);background:transparent;color:#a7b2d6;cursor:pointer;">Ablehnen</button>
+        <button id="cookieAccept" onclick="(function(){localStorage.setItem('blitzai_cc','yes');document.getElementById('cookieBanner').style.display='none';})()" style="font-family:Inter,system-ui,sans-serif;font-size:13px;font-weight:600;padding:9px 20px;border-radius:12px;border:1px solid rgba(47,107,255,0.55);background:linear-gradient(135deg,rgba(47,107,255,0.95),rgba(47,107,255,0.6));color:#f2f5ff;cursor:pointer;box-shadow:0 4px 18px rgba(47,107,255,0.25);">Akzeptieren</button>
+      </div>
+    </div>
+  </div>
+  <script>
+    (function(){
+      if(!localStorage.getItem('blitzai_cc')){
+        var b=document.getElementById('cookieBanner');
+        b.style.cssText='display:block;position:fixed;bottom:0;left:0;right:0;z-index:9999;padding:0 16px 16px;pointer-events:none;opacity:0;transform:translateY(20px);transition:opacity 0.35s ease,transform 0.35s ease;';
+        setTimeout(function(){b.style.opacity='1';b.style.transform='translateY(0)';},400);
+      }
+    })();
+  </script>
 </body>
 </html>
