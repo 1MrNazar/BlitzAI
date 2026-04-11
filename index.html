@@ -821,6 +821,151 @@
       .trust-grid, .grid-2, .grid-3{ overflow: hidden; }
     }
     .anchor{scroll-margin-top: 96px;}
+    /* ===== STATS SECTION ===== */
+    .stats-section{
+      padding: 52px 0 48px;
+      position: relative;
+      z-index: 2;
+      border-top: 1px solid rgba(27,37,66,.55);
+      border-bottom: 1px solid rgba(27,37,66,.55);
+      background: rgba(13,18,34,.35);
+    }
+    .stats-section::before{
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(700px 300px at 50% 50%, rgba(47,107,255,.07), transparent 70%);
+      pointer-events: none;
+    }
+    .stats-grid{
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+    }
+    .stat-item{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 28px 32px;
+      position: relative;
+    }
+    .stat-item + .stat-item::before{
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 20%;
+      height: 60%;
+      width: 1px;
+      background: rgba(27,37,66,.8);
+    }
+    .stat-icon{
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      background: rgba(47,107,255,.12);
+      border: 1px solid rgba(47,107,255,.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+    .stat-icon svg{ width: 24px; height: 24px; }
+    .stat-num{
+      font-family: Sora, Inter, system-ui, sans-serif;
+      font-size: clamp(36px, 4vw, 52px);
+      font-weight: 700;
+      letter-spacing: -1.5px;
+      line-height: 1;
+      background: linear-gradient(135deg, #fff 0%, rgba(242,245,255,.75) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 4px;
+    }
+    .stat-num span{
+      color: var(--accent);
+      -webkit-text-fill-color: var(--accent);
+    }
+    .stat-label{
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+    .stat-desc{
+      font-size: 13px;
+      color: var(--muted);
+      max-width: 20ch;
+      line-height: 1.5;
+    }
+    @media(max-width: 640px){
+      .stats-grid{ grid-template-columns: 1fr; }
+      .stat-item + .stat-item::before{ top:0; left:20%; height:1px; width:60%; }
+    }
+
+    /* ===== SVG ICON VISUALS ===== */
+    .section-icon{
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 52px;
+      height: 52px;
+      border-radius: 16px;
+      background: rgba(47,107,255,.1);
+      border: 1px solid rgba(47,107,255,.2);
+      margin-bottom: 18px;
+    }
+    .section-icon.green{
+      background: rgba(53,227,161,.1);
+      border-color: rgba(53,227,161,.2);
+    }
+    .section-icon.warn{
+      background: rgba(255,204,102,.1);
+      border-color: rgba(255,204,102,.2);
+    }
+    .card-icon{
+      width: 40px; height: 40px;
+      border-radius: 12px;
+      background: rgba(47,107,255,.08);
+      border: 1px solid rgba(47,107,255,.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 14px;
+    }
+    .card-icon svg{ width: 20px; height: 20px; }
+    .card-icon.green{ background: rgba(53,227,161,.08); border-color: rgba(53,227,161,.15); }
+    .card-icon.warn{ background: rgba(255,204,102,.08); border-color: rgba(255,204,102,.15); }
+
+    /* ===== DECORATIVE BACKGROUND SHAPES ===== */
+    .section-bg-blob{
+      position: absolute;
+      pointer-events: none;
+      z-index: 0;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: .18;
+    }
+
+    /* ===== STEP NUMBERS WITH VISUAL ===== */
+    .step-visual{
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(47,107,255,.2), rgba(47,107,255,.05));
+      border: 1px solid rgba(47,107,255,.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: Sora, sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 14px;
+      flex-shrink: 0;
+    }
+
   </style>
 </head>
 <body>
@@ -978,10 +1123,22 @@
       </div>
       <div class="trust-grid" id="vorteile">
         <div class="trust">
+          <div class="card-icon green">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#35E3A1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
+              <polyline points="17 6 23 6 23 12"/>
+            </svg>
+          </div>
           <h3>Mehr Buchungen aus den gleichen Anfragen</h3>
           <p>Weil Interessenten sofort eine klare Antwort und konkrete Zeiten bekommen.</p>
         </div>
         <div class="trust">
+          <div class="card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#2F6BFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+              <polyline points="22 4 12 14.01 9 11.01"/>
+            </svg>
+          </div>
           <h3>Weniger Inbox-Stress</h3>
           <p>Keine vergessenen Nachrichten, keine Doppelbuchungen durch Hektik.</p>
         </div>
@@ -994,16 +1151,77 @@
     </div>
   </main>
 
+  <!-- STATS BAR -->
+  <section class="stats-section" aria-label="Kennzahlen">
+    <div class="wrap">
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#2F6BFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+              <line x1="9" y1="10" x2="15" y2="10"/>
+              <line x1="12" y1="7" x2="12" y2="13"/>
+            </svg>
+          </div>
+          <div class="stat-num"><span>60%</span></div>
+          <div class="stat-label">weniger Nachrichten zu beantworten</div>
+          <div class="stat-desc">Die meisten FAQs werden automatisch bearbeitet.</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#2F6BFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <polyline points="12 6 12 12 16 14"/>
+            </svg>
+          </div>
+          <div class="stat-num"><span>&lt; 2 min</span></div>
+          <div class="stat-label">Antwortzeit</div>
+          <div class="stat-desc">Auch außerhalb der Öffnungszeiten.</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#2F6BFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="7" height="7" rx="1"/>
+              <rect x="14" y="3" width="7" height="7" rx="1"/>
+              <rect x="3" y="14" width="7" height="7" rx="1"/>
+              <rect x="14" y="14" width="7" height="7" rx="1"/>
+            </svg>
+          </div>
+          <div class="stat-num"><span>24/7</span></div>
+          <div class="stat-label">Support</div>
+          <div class="stat-desc">Immer online, nie müde.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
   <!-- PROBLEM -->
   <section class="section compact anchor" id="funktion">
     <div class="wrap">
+      <div class="section-icon warn">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#FFCC66" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+          <line x1="12" y1="9" x2="12" y2="13"/>
+          <line x1="12" y1="17" x2="12.01" y2="17"/>
+        </svg>
+      </div>
       <h2 class="h2">Die meisten Studios verlieren Termine nicht wegen Qualit&#xE4;t, sondern wegen Reaktionszeit.</h2>
       <p class="lead">
         Menschen schreiben dann, wenn sie Zeit haben. Oft abends, fr&#xFC;h morgens oder am Wochenende. Wenn in dem Moment niemand reagiert, wird einfach das n&#xE4;chste Studio angeschrieben.
       </p>
       <div class="grid-2">
         <div class="card">
-          <div class="tag">&#x26A0;&#xFE0F; After-Hours Buchungen</div>
+          <div class="card-icon warn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#FFCC66" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+        </div>
+        <div class="tag">&#x26A0;&#xFE0F; After-Hours Buchungen</div>
           <h3>Du bist offline &#x2014; deine Kunden nicht.</h3>
           <p>
             Ein gro&#xDF;er Teil der Buchungen passiert au&#xDF;erhalb der &#xD6;ffnungszeiten. Ohne "always-on" Buchung bist du f&#xFC;r viele Interessenten schlicht nicht erreichbar.
@@ -1011,7 +1229,13 @@
           <div style="margin-top:14px;"></div>
         </div>
         <div class="card">
-          <div class="tag">&#x23F3; Langsame DMs</div>
+          <div class="card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#2F6BFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <polyline points="12 6 12 12 16 14"/>
+          </svg>
+        </div>
+        <div class="tag">&#x23F3; Langsame DMs</div>
           <h3>Wer in Minuten antwortet, gewinnt den Termin.</h3>
           <p>
             Wenn jemand 2&#x2013;3 Salons anschreibt, bucht er meistens dort, wo sofort Klarheit entsteht. Nicht, weil es "besser" ist, sondern weil es schneller ist.
@@ -1049,27 +1273,54 @@
     <div class="wrap">
       <div class="split">
         <div>
-          <h2 class="h2">BlitzAI ist dein KI-Mitarbeiter f&#xFC;r die Rezeption &#x2013; direkt in Instagram.</h2>
+          <div class="section-icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#2F6BFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+        </svg>
+      </div>
+      <h2 class="h2">BlitzAI ist dein KI-Mitarbeiter f&#xFC;r die Rezeption &#x2013; direkt in Instagram.</h2>
           <p class="lead">
             BlitzAI reagiert sofort, fragt gezielt nach fehlenden Details und f&#xFC;hrt Interessenten sauber zum Termin. Kurz, freundlich, professionell - alles im stil von deinen business.
           </p>
           <div class="stack">
             <div class="card">
-              <div class="tag">&#x1F9ED; Intelligentes Routing</div>
+              <div class="card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#2F6BFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="3"/>
+                <path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/>
+              </svg>
+            </div>
+            <div class="tag">&#x1F9ED; Intelligentes Routing</div>
               <h3>Frage oder Buchung? BlitzAI erkennt es automatisch.</h3>
               <p>
                 Preise, Services, Dauer, Standort, Policies: Antworten kommen direkt. Wenn jemand buchen will, startet automatisch der Termin-Flow.
               </p>
             </div>
             <div class="card">
-              <div class="tag">&#x1F5D3;&#xFE0F; Live-Verf&#xFC;gbarkeit</div>
+              <div class="card-icon green">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#35E3A1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                <line x1="16" y1="2" x2="16" y2="6"/>
+                <line x1="8" y1="2" x2="8" y2="6"/>
+                <line x1="3" y1="10" x2="21" y2="10"/>
+                <path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/>
+              </svg>
+            </div>
+            <div class="tag">&#x1F5D3;&#xFE0F; Live-Verf&#xFC;gbarkeit</div>
               <h3>Konkrete Zeiten statt endloser R&#xFC;ckfragen.</h3>
               <p>
                 BlitzAI pr&#xFC;ft die Verf&#xFC;gbarkeit im Kalender, schl&#xE4;gt passende Slots vor und bucht nach Best&#xE4;tigung. Umbuchen und Stornieren laufen genauso schnell und einfach.
               </p>
             </div>
             <div class="card">
-              <div class="tag">&#x1F3AF; Saubere Daten</div>
+              <div class="card-icon warn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#FFCC66" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <circle cx="12" cy="12" r="6"/>
+                <circle cx="12" cy="12" r="2"/>
+              </svg>
+            </div>
+            <div class="tag">&#x1F3AF; Saubere Daten</div>
               <h3>Wichtige Infos werden automatisch erfasst.</h3>
               <p>
                 Name, Service, Wunschzeit, Notizen &#x2014; alles wird direkt ins Kalenderevent &#xFC;bernommen, damit du nichts nachfragen musst und die Infos nicht irgendwo zusammensuchen musst.
@@ -1083,7 +1334,12 @@
         </div>
         <div>
           <div class="card" style="padding:20px;">
-            <div class="tag">&#x26A1; Ablauf in 3 Schritten</div>
+            <div class="card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#2F6BFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+            </svg>
+          </div>
+          <div class="tag">&#x26A1; Ablauf in 3 Schritten</div>
             <h3>In wenigen Tagen live.</h3>
             <p>Kein kompliziertes Projekt. Klarer Prozess, sauber umgesetzt.</p>
             <div class="divider"></div>
@@ -1121,24 +1377,50 @@
   <!-- RESULTS -->
   <section class="section anchor" id="ergebnis">
     <div class="wrap">
+      <div class="section-icon green">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#35E3A1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/>
+          <polyline points="16 7 22 7 22 13"/>
+        </svg>
+      </div>
       <h2 class="h2">Was sich in der Praxis ver&#xE4;ndert</h2>
       <p class="lead">
         BlitzAI ersetzt keine gute Arbeit. Es sorgt daf&#xFC;r, dass gute Arbeit auch gebucht wird. Du bekommst mehr Klarheit, weniger Stress und einen sauberen Ablauf.
       </p>
       <div class="grid-3">
         <div class="card">
+          <div class="card-icon green">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#35E3A1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="20" x2="12" y2="10"/>
+              <line x1="18" y1="20" x2="18" y2="4"/>
+              <line x1="6" y1="20" x2="6" y2="16"/>
+            </svg>
+          </div>
           <div class="tag">&#x1F4C8; Mehr Buchungen</div>
           <h3>Kein "Warten" mehr.</h3>
           <p>Interessenten bekommen sofort Antworten und konkrete Zeiten.</p>
           <div style="margin-top:14px;"></div>
         </div>
         <div class="card">
+          <div class="card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#2F6BFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+              <line x1="16" y1="2" x2="16" y2="6"/>
+              <line x1="8" y1="2" x2="8" y2="6"/>
+              <line x1="3" y1="10" x2="21" y2="10"/>
+            </svg>
+          </div>
           <div class="tag">&#x1F9D8; Weniger Admin-Last</div>
           <h3>Inbox ruhig, Kalender sauber.</h3>
           <p>Weniger R&#xFC;ckfragen, weniger manuelles Buchen, weniger Fehler unter Stress.</p>
           <div style="margin-top:14px;"></div>
         </div>
         <div class="card">
+          <div class="card-icon warn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#FFCC66" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+          </div>
           <div class="tag">&#x2705; Besserer Ablauf</div>
           <h3>Professionell, konsistent, freundlich.</h3>
           <p>Der Ton bleibt gleich, auch wenn du gerade voll im Service bist oder Feierabend hast.</p>
@@ -1155,6 +1437,12 @@
   <!-- PRICING -->
   <section class="section anchor" id="preise">
     <div class="wrap">
+      <div class="section-icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#2F6BFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="12" y1="1" x2="12" y2="23"/>
+          <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+        </svg>
+      </div>
       <h2 class="h2">Preise</h2>
       <p class="lead">
       </p>
@@ -1218,6 +1506,13 @@
   <!-- FAQ -->
   <section class="section anchor" id="faq">
     <div class="wrap">
+      <div class="section-icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#2F6BFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+          <line x1="12" y1="17" x2="12.01" y2="17"/>
+        </svg>
+      </div>
       <h2 class="h2">FAQ</h2>
       <p class="lead"></p>
       <div class="faq">
